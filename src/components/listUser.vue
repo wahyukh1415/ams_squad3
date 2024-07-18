@@ -2,13 +2,16 @@
 import axios from "axios";
 import { reactive, onMounted, ref, watch, computed } from "vue";
 
-const url = "http://localhost:8080/secured/user/list?page=1&size=100";
-const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcyMTMxMTYxMTMyMSwiZXhwIjozNjAwMDAwfQ.OPdHERSgbDK0-yzZW9HwLDsmZ6yymgIrCltQAVGY3a0"
+const baseUrl = "http://localhost:8080/secured/user";
+const token =
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcyMTMxNzgzMzUwMSwiZXhwIjozNjAwMDAwfQ.AU7KIAxDU0FkSTWBRJnn-OMbPPghztfFyJs6HjWehbU";
+//Token diinput manual
+
 const listUser = reactive([]);
 const keyword = ref("");
 const filteredUsers = ref([]);
 
-const searchUsers = () => {
+const searchUsers = () => { // fungsi search
   if (!keyword.value) {
     filteredUsers.value = listUser;
   } else {
@@ -18,17 +21,38 @@ const searchUsers = () => {
   }
 };
 
-watch(keyword, searchUsers);
+watch(keyword, searchUsers); 
 
-const getListUser = async () => {
-  const res = await axios.get(url, {
+const getListUser = async () => { 
+  const res = await axios.get(`${baseUrl}/list?page=1&size=100`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
   listUser.push(...res.data.data);
-  filteredUsers.value = listUser
+  filteredUsers.value = listUser;
+};
+
+const deleteUser = (name) => {
+  axios
+    .delete(`${baseUrl}/delete-user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        name: name,
+      },
+    })
+    .then((res) => {
+      alert("User deleted successfully");
+      reloadListUser();
+    });
+};
+
+const reloadListUser = async () => {
+  listUser.length = 0; 
+  await getListUser(); // reload daftar pengguna dari API setelah delete
 };
 
 onMounted(() => {
@@ -62,7 +86,13 @@ onMounted(() => {
           <td>{{ index + 1 }}</td>
           <td>{{ data.name }}</td>
           <td>
-            <button class="btn btn-danger" v-bind:disabled="data.name === 'Admin'">Delete</button>
+            <button
+              class="btn btn-danger"
+              v-bind:disabled="data.name === 'Admin'"
+              @click="deleteUser(data.name)"
+            >
+              Delete
+            </button>
           </td>
         </tr>
       </tbody>
@@ -77,7 +107,8 @@ onMounted(() => {
 
 th {
   font-weight: 700;
-  background: rgb(167, 197, 202);
+  color: white;
+  background: rgb(59, 59, 59);
 }
 
 .form-outline {
