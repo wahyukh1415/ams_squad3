@@ -4,14 +4,15 @@ import { reactive, onMounted, ref, watch, computed } from "vue";
 
 const baseUrl = "http://localhost:8080/secured/user";
 const token =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcyMTMxNzgzMzUwMSwiZXhwIjozNjAwMDAwfQ.AU7KIAxDU0FkSTWBRJnn-OMbPPghztfFyJs6HjWehbU";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcyMTMyMTUzMzUwNCwiZXhwIjozNjAwMDAwfQ.zamVIqfBxtNXXjSVBdY0eLF7IO_P8oFrcAWqptcDzKQ";
 //Token diinput manual
 
 const listUser = reactive([]);
 const keyword = ref("");
 const filteredUsers = ref([]);
 
-const searchUsers = () => { // fungsi search
+const searchUsers = () => {
+  // fungsi search
   if (!keyword.value) {
     filteredUsers.value = listUser;
   } else {
@@ -21,9 +22,9 @@ const searchUsers = () => { // fungsi search
   }
 };
 
-watch(keyword, searchUsers); 
+watch(keyword, searchUsers);
 
-const getListUser = async () => { 
+const getListUser = async () => {
   const res = await axios.get(`${baseUrl}/list?page=1&size=100`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -51,7 +52,7 @@ const deleteUser = (name) => {
 };
 
 const reloadListUser = async () => {
-  listUser.length = 0; 
+  listUser.length = 0;
   await getListUser(); // reload daftar pengguna dari API setelah delete
 };
 
@@ -65,6 +66,7 @@ onMounted(() => {
     <div class="wrapper d-flex justify-content-between">
       <div class="form-outline">
         <input
+          name="search-input"
           v-model="keyword"
           type="search"
           class="form-control"

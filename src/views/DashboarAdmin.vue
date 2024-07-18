@@ -1,9 +1,9 @@
 <script setup>
-import ListUser from "../components/listUser.vue";
+import User from "../components/tableUser.vue";
 </script>
 
 <template>
   <div class="container">
-    <ListUser />
+    <User />
   </div>
 </template>
