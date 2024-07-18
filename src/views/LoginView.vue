@@ -4,23 +4,32 @@ import { storeToRefs } from "pinia";
 import IllustrationLogin from "../components/illustrations/IllustrationLogin.vue";
 import { useLoginStore } from "@/stores/login";
 
-const { email, password, hidePassword, passwordFieldIcon, passwordFieldType, isValidEmail, isValidPassword } =
-  storeToRefs(useLoginStore());
+const {
+  email,
+  password,
+  hidePassword,
+  passwordFieldIcon,
+  passwordFieldType,
+  emailError,
+  passwordError,
+} = storeToRefs(useLoginStore());
 const { authenticate } = useLoginStore();
 
 watch(email, (value) => {
   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
-    isValidEmail.value = true;
+    emailError.value = ''
+  } else if (value == '') {
+    emailError.value = 'Email Address cannot be empty'
   } else {
-    isValidEmail.value = false;
+    emailError.value = 'Please enter a valid Email Address'
   }
 });
 
 watch(password, (value) => {
-  if (value !== '') {
-    isValidPassword.value = true;
+  if (!value) {
+    passwordError.value = 'Password cannot be empty';
   } else {
-    isValidPassword.value = false;
+    passwordError.value = '';
   }
 });
 </script>
@@ -41,11 +50,11 @@ watch(password, (value) => {
         <div class="col-md-10 mx-auto col-lg-5">
           <form class="p-4 p-md-5 border rounded-3 bg-light" novalidate>
             <h4 class="text-center mb-4 text-primary">Login</h4>
-            <div class="form-floating mb-2">
+            <div class="form-floating mb-3">
               <input
                 type="email"
                 class="form-control"
-                :class="{ 'is-invalid': !isValidEmail }"
+                :class="{ 'is-invalid': emailError }"
                 name="email"
                 v-model="email"
                 id="email"
@@ -54,15 +63,15 @@ watch(password, (value) => {
                 required
               />
               <label for="email">Email</label>
-              <div v-if="!isValidEmail" class="invalid-feedback">
-                Please enter a valid Email Address
+              <div v-if="emailError" class="invalid-feedback">
+                {{ emailError }}
               </div>
             </div>
             <div class="position-relative form-floating mb-3">
               <input
                 :type="passwordFieldType"
                 class="form-control"
-                :class="{ 'is-invalid': !isValidPassword }"
+                :class="{ 'is-invalid': passwordError }"
                 name="password"
                 v-model="password"
                 id="password"
@@ -70,17 +79,21 @@ watch(password, (value) => {
                 autocomplete="password"
                 required
               />
-              <span :class="{ 'd-none': !isValidPassword }" class="show-password text-secondary position-absolute top-50 end-0 translate-middle-y"
+              <span
+                :class="{ 'd-none': passwordError }"
+                class="show-password text-secondary position-absolute top-50 end-0 translate-middle-y"
                 title="Show password"
               >
-                <i class="bi"
-                  :class="[passwordFieldIcon]"
+                <i
+                  class="bi"
+                  :class="passwordFieldIcon"
                   @mousedown="hidePassword = !hidePassword"
-                  @mouseup="hidePassword = !hidePassword"></i>
+                  @mouseup="hidePassword = !hidePassword"
+                ></i>
               </span>
               <label for="password">Password</label>
-              <div v-if="!isValidPassword" class="invalid-feedback">
-                Password cannot be empty
+              <div v-if="passwordError" class="invalid-feedback">
+                {{ passwordError }}
               </div>
             </div>
             <button class="w-100 btn btn-primary" @click.prevent="authenticate">
