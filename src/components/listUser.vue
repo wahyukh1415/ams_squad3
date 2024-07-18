@@ -1,13 +1,24 @@
 <script setup>
 import axios from "axios";
-import { reactive, onMounted, ref, watch } from "vue";
+import { reactive, onMounted, ref, watch, computed } from "vue";
 
 const url = "http://localhost:8080/secured/user/list?page=1&size=100";
-const token =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcyMTMwNzI2NzAyMywiZXhwIjozNjAwMDAwfQ.KJrlVbfJF0dlj_3jBxVDUXyiJIBGG8d7ZYSojgPVnGA";
+const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcyMTMxMTYxMTMyMSwiZXhwIjozNjAwMDAwfQ.OPdHERSgbDK0-yzZW9HwLDsmZ6yymgIrCltQAVGY3a0"
 const listUser = reactive([]);
-const filteredUsers = reactive([]);
-const searchKeyword = ref("");
+const keyword = ref("");
+const filteredUsers = ref([]);
+
+const searchUsers = () => {
+  if (!keyword.value) {
+    filteredUsers.value = listUser;
+  } else {
+    filteredUsers.value = listUser.filter((user) =>
+      user.name.toLowerCase().includes(keyword.value.toLowerCase())
+    );
+  }
+};
+
+watch(keyword, searchUsers);
 
 const getListUser = async () => {
   const res = await axios.get(url, {
@@ -17,13 +28,12 @@ const getListUser = async () => {
   });
 
   listUser.push(...res.data.data);
+  filteredUsers.value = listUser
 };
 
 onMounted(() => {
   getListUser();
 });
-
-
 </script>
 
 <template>
@@ -31,7 +41,7 @@ onMounted(() => {
     <div class="wrapper d-flex justify-content-between">
       <div class="form-outline">
         <input
-          v-model="searchKeyword"
+          v-model="keyword"
           type="search"
           class="form-control"
           placeholder="Search"
@@ -43,16 +53,16 @@ onMounted(() => {
       <thead>
         <tr>
           <th class="col-1">No</th>
-          <th class="col-8">Nama</th>
-          <th class="col-3">Action</th>
+          <th class="col-9">Nama</th>
+          <th class="col-2">Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(data, index) in listUser" :key="index">
+        <tr v-for="(data, index) in filteredUsers" :key="index">
           <td>{{ index + 1 }}</td>
           <td>{{ data.name }}</td>
           <td>
-            <button class="btn btn-danger">Remove</button>
+            <button class="btn btn-danger" v-bind:disabled="data.name === 'Admin'">Delete</button>
           </td>
         </tr>
       </tbody>
@@ -61,7 +71,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-table{
+.table {
   text-align: center;
 }
 
@@ -78,7 +88,7 @@ th {
   box-shadow: none;
 }
 
-.wrapper{
-  padding: 20px 0px;
+.wrapper {
+  padding: 15px 0px;
 }
 </style>
