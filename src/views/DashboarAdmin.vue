@@ -3,6 +3,7 @@ import ListUser from "../components/listUser.vue";
 </script>
 
 <template>
-  <h1>Dashboard Admin</h1>
-  <ListUser />
+  <div class="container">
+    <ListUser />
+  </div>
 </template>
