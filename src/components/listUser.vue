@@ -1,44 +1,44 @@
 <script setup>
 import axios from "axios";
-import { reactive, onMounted } from "vue";
+import { reactive, onMounted, ref, watch } from "vue";
 
+const url = "http://localhost:8080/secured/user/list?page=1&size=100";
 const token =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcyMTI5ODI5NDE1MywiZXhwIjozNjAwMDAwfQ.e1VRSP6djd4Wgj3I5sIMF84Yk2V124OwBizz8yiK3_o";
-
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcyMTMwNzI2NzAyMywiZXhwIjozNjAwMDAwfQ.KJrlVbfJF0dlj_3jBxVDUXyiJIBGG8d7ZYSojgPVnGA";
 const listUser = reactive([]);
-
-const listDummy = reactive([
-  {
-    nama: "affi",
-  },
-  {
-    nama: "kusuma",
-  },
-  {
-    nama: "zaenab",
-  },
-]);
+const filteredUsers = reactive([]);
+const searchKeyword = ref("");
 
 const getListUser = async () => {
-  const res = await axios.get(
-    "http://localhost:8080/secured/user/list?page=1&size=100",
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const res = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
   listUser.push(...res.data.data);
-  console.log(res);
 };
 
 onMounted(() => {
   getListUser();
 });
+
+
 </script>
+
 <template>
   <div>
-    <h3>This is List User Component</h3>
+    <div class="wrapper d-flex justify-content-between">
+      <div class="form-outline">
+        <input
+          v-model="searchKeyword"
+          type="search"
+          class="form-control"
+          placeholder="Search"
+        />
+      </div>
+      <button class="btn btn-primary">Register</button>
+    </div>
     <table class="table table-bordered">
       <thead>
         <tr>
@@ -61,7 +61,24 @@ onMounted(() => {
 </template>
 
 <style scoped>
+table{
+  text-align: center;
+}
+
 th {
   font-weight: 700;
+  background: rgb(167, 197, 202);
+}
+
+.form-outline {
+  width: 30%;
+}
+
+.form-control:focus {
+  box-shadow: none;
+}
+
+.wrapper{
+  padding: 20px 0px;
 }
 </style>
