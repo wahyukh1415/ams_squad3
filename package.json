@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/nunito-sans": "^5.0.13",
     "axios": "^1.7.2",
     "bootstrap-icons": "^1.11.3",
     "pinia": "^2.1.7",

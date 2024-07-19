@@ -1,3 +1,4 @@
+import '@fontsource/nunito-sans'
 import './assets/main.css'
 import './assets/main.scss'
 import 'bootstrap-icons/font/bootstrap-icons.min.css'
