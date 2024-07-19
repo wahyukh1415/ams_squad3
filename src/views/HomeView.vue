@@ -29,8 +29,8 @@ function logout() {
             <button class="btn btn-primary" @click="logout">conflict</button>
         </div>
         <div>
-            <button class="btn btn-danger">Colek Rehan</button>
-            <button class="btn btn-danger border border-1">Colek Sony</button>
+            <button class="btn btn-warning">Colek Rehan</button>
+            <button class="btn btn-secondary">Colek Colek Sony</button>
         </div>
     </div>
 </template>
