@@ -1,8 +1,8 @@
+<script setup>
+import { RouterView } from "vue-router";
+</script>
 <template>
-  <div class="home">
-    <h1>This is a home page</h1>
-    <button class="btn btn-primary">Submit</button>
-  </div>
+  <RouterView />
 </template>
 
 <style>
