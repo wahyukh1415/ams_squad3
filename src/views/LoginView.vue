@@ -108,7 +108,7 @@ onBeforeMount(() => {
             <button
               id="login-button"
               v-if="!loading"
-              class="w-100 btn btn-primary"
+              class="w-100 btn btn-lg btn-primary"
               @click.prevent="login"
             >
               Login
@@ -116,7 +116,7 @@ onBeforeMount(() => {
             <button
               id="loading-login-button"
               v-else
-              class="w-100 btn btn-primary"
+              class="w-100 btn btn-lg btn-primary"
               disabled
             >
               <div class="spinner-border spinner-border-sm" role="status">
@@ -136,12 +136,6 @@ onBeforeMount(() => {
 </template>
 
 <style scoped>
-.btn {
-  padding: 0.8rem 2rem;
-  border-radius: 50px;
-  font-weight: 600;
-}
-
 .illustration {
   display: none;
 }

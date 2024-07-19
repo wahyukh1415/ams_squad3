@@ -20,6 +20,10 @@ function logout() {
 </script>
 
 <template>
-    <h1>Welcome {{ authUser.name }}, this is homepage</h1>
-    <button class="btn btn-primary" @click="logout">Logout</button>
+    <div class="p-4 d-flex align-items-center">
+        <h1 class="w-100">Welcome {{ authUser.name }}, this is homepage</h1>
+        <div>
+            <button class="btn btn-primary" @click="logout">Logout</button>
+        </div>
+    </div>
 </template>
