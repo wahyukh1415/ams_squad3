@@ -4,7 +4,7 @@ import { reactive, onMounted, ref, watch, computed } from "vue";
 
 const baseUrl = "http://localhost:8080/secured/user";
 const token =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcyMTMyMTUzMzUwNCwiZXhwIjozNjAwMDAwfQ.zamVIqfBxtNXXjSVBdY0eLF7IO_P8oFrcAWqptcDzKQ";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcyMTM2MTM0Nzg5NCwiZXhwIjozNjAwMDAwfQ.7Fj8xm-hiUoYSwIFn3mnkawMrAOpUnIRSxY2XQY_tgU";
 //Token diinput manual
 
 const listUser = reactive([]);
@@ -73,11 +73,14 @@ onMounted(() => {
           placeholder="Search"
         />
       </div>
-      <button class="btn btn-primary">Register</button>
+      <button class="btn btn-primary" title="Add User">
+        <i class="bi bi-person-plus-fill"></i>
+        <span class="register-button"> Register</span>
+      </button>
     </div>
     <table class="table table-bordered">
       <thead>
-        <tr>
+        <tr class="table-dark">
           <th class="col-1">No</th>
           <th class="col-9">Nama</th>
           <th class="col-2">Action</th>
@@ -92,8 +95,9 @@ onMounted(() => {
               class="btn btn-danger"
               v-bind:disabled="data.name === 'Admin'"
               @click="deleteUser(data.name)"
+              title="Delete User"
             >
-              Delete
+              <i class="bi bi-trash3-fill"></i>
             </button>
           </td>
         </tr>
@@ -103,25 +107,37 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.table {
-  text-align: center;
-}
-
-th {
-  font-weight: 700;
-  color: white;
-  background: rgb(59, 59, 59);
-}
-
 .form-outline {
-  width: 30%;
+  width: 50%;
+}
+
+.register-button {
+  display: none;
 }
 
 .form-control:focus {
   box-shadow: none;
 }
 
+th {
+  font-weight: 700;
+}
+
 .wrapper {
   padding: 15px 0px;
+}
+
+.table {
+  text-align: center;
+}
+
+@media only screen and (min-width: 768px) {
+  .form-outline {
+    width: 30%;
+  }
+
+  .register-button {
+    display: inline;
+  }
 }
 </style>
