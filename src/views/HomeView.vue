@@ -28,5 +28,8 @@ function logout() {
         <div>
             <button class="btn btn-primary">Colek Sony</button>
         </div>
+        <div>
+            <button class="btn btn-primary">Colek Rehan</button>
+        </div>
     </div>
 </template>
