@@ -1,8 +1,9 @@
 <script setup>
-import { onBeforeMount } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
+const authUser = ref(JSON.parse(localStorage.getItem('auth-user')))
 
 onBeforeMount(() => {
     if(!localStorage.getItem('token') && !localStorage.getItem('auth-user')) {
@@ -19,6 +20,6 @@ function logout() {
 </script>
 
 <template>
-    <h1>This is homepage</h1>
+    <h1>Welcome {{ authUser.name }}, this is homepage</h1>
     <button class="btn btn-primary" @click="logout">Logout</button>
 </template>

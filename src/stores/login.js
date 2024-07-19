@@ -48,7 +48,7 @@ export const useLoginStore = defineStore('login', () => {
 
 					getUser();
 
-					router.push({ path: '/home' }).then(() => { router.go(0) });
+					router.push({ name: 'home' }).then(() => { router.go(0) });
 				} else {
 					emailError.value = response.data.message;
 					password.value = '';

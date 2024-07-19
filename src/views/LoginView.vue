@@ -38,7 +38,7 @@ watch(password, (value) => {
 
 onBeforeMount(() => {
   if (localStorage.getItem("token")) {
-    router.push({ path: "/home" });
+    router.push({ name: "home" });
   }
 });
 </script>
