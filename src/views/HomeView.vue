@@ -25,5 +25,8 @@ function logout() {
         <div>
             <button class="btn btn-primary" @click="logout">Logout</button>
         </div>
+        <div>
+            <button class="btn btn-primary">Colek Sony</button>
+        </div>
     </div>
 </template>
