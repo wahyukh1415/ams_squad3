@@ -1,11 +1,11 @@
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { onMouonMounted, nted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
 const authUser = ref(JSON.parse(localStorage.getItem('auth-user')))
 
-onBeforeMount(() => {
+onMounted(() => {
     if(!localStorage.getItem('token') && !localStorage.getItem('auth-user')) {
         router.push({name: 'login'})
     }
@@ -21,7 +21,7 @@ function logout() {
 
 <template>
     <div class="p-4 d-flex align-items-center">
-        <h1 class="w-100">Welcome {{ authUser.name }}, this is homepage</h1>
+        <h1 v-if="authUser" class="w-100">Welcome {{ authUser.name }}, this is homepage</h1>
         <div>
             <button class="btn btn-primary" @click="logout">Logout</button>
         </div>
