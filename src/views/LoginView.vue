@@ -1,10 +1,12 @@
 <script setup>
-import { ref, watch, watchEffect } from "vue";
+import { onBeforeMount, watch } from "vue";
 import { storeToRefs } from "pinia";
 import IllustrationLogin from "../components/illustrations/IllustrationLogin.vue";
 import { useLoginStore } from "@/stores/login";
+import { useRouter } from "vue-router";
 
 const {
+  loading,
   email,
   password,
   hidePassword,
@@ -13,23 +15,30 @@ const {
   emailError,
   passwordError,
 } = storeToRefs(useLoginStore());
-const { authenticate } = useLoginStore();
+const { login } = useLoginStore();
+const router = useRouter();
 
 watch(email, (value) => {
   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
-    emailError.value = ''
-  } else if (value == '') {
-    emailError.value = 'Email Address cannot be empty'
+    emailError.value = "";
+  } else if (value == "") {
+    emailError.value = "Email Address cannot be empty";
   } else {
-    emailError.value = 'Please enter a valid Email Address'
+    emailError.value = "Please enter a valid Email Address";
   }
 });
 
 watch(password, (value) => {
   if (!value) {
-    passwordError.value = 'Password cannot be empty';
+    passwordError.value = "Password cannot be empty";
   } else {
-    passwordError.value = '';
+    passwordError.value = "";
+  }
+});
+
+onBeforeMount(() => {
+  if (localStorage.getItem("token")) {
+    router.push({ path: "/home" });
   }
 });
 </script>
@@ -76,7 +85,7 @@ watch(password, (value) => {
                 v-model="password"
                 id="password"
                 placeholder="Password"
-                autocomplete="password"
+                autocomplete="current-password"
                 required
               />
               <span
@@ -96,8 +105,23 @@ watch(password, (value) => {
                 {{ passwordError }}
               </div>
             </div>
-            <button class="w-100 btn btn-primary" @click.prevent="authenticate">
+            <button
+              id="login-button"
+              v-if="!loading"
+              class="w-100 btn btn-primary"
+              @click.prevent="login"
+            >
               Login
+            </button>
+            <button
+              id="loading-login-button"
+              v-else
+              class="w-100 btn btn-primary"
+              disabled
+            >
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
             </button>
             <hr class="my-4" />
             <p class="footer text-muted text-center">
@@ -115,7 +139,7 @@ watch(password, (value) => {
 .btn {
   padding: 0.8rem 2rem;
   border-radius: 50px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .illustration {
