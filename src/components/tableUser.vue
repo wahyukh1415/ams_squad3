@@ -1,16 +1,20 @@
 <script setup>
 import axios from "axios";
-import { reactive, onMounted, ref, watch, computed } from "vue";
+import { reactive, onMounted, onBeforeMount, ref, watch } from "vue";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "../stores/auth";
+
+const { authUser } = storeToRefs(useAuthStore());
+const { authCheck } = useAuthStore();
 
 const baseUrl = "http://localhost:8080/secured/user";
-const token = localStorage.getItem('token');
+// const token = localStorage.getItem('token');
 
 const listUser = reactive([]);
 const keyword = ref("");
 const filteredUsers = ref([]);
 
 const searchUsers = () => {
-  // fungsi search
   if (!keyword.value) {
     filteredUsers.value = listUser;
   } else {
@@ -25,7 +29,7 @@ watch(keyword, searchUsers);
 const getListUser = async () => {
   const res = await axios.get(`${baseUrl}/list?page=1&size=100`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: authUser.value.token,
     },
   });
 
@@ -37,7 +41,7 @@ const deleteUser = (name) => {
   axios
     .delete(`${baseUrl}/delete-user`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: authUser.value.token,
       },
       data: {
         name: name,
@@ -51,10 +55,11 @@ const deleteUser = (name) => {
 
 const reloadListUser = async () => {
   listUser.length = 0;
-  await getListUser(); // reload daftar pengguna dari API setelah delete
+  await getListUser(); // reload list user API after delete
 };
 
-onMounted(() => {
+onBeforeMount(() => {
+  authCheck();
   getListUser();
 });
 </script>
@@ -98,6 +103,9 @@ onMounted(() => {
               <i class="bi bi-trash3-fill"></i>
             </button>
           </td>
+        </tr>
+        <tr v-if="filteredUsers.length == 0">
+          <td colspan="3">Data not found..</td>
         </tr>
       </tbody>
     </table>
