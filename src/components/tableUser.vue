@@ -3,9 +3,7 @@ import axios from "axios";
 import { reactive, onMounted, ref, watch, computed } from "vue";
 
 const baseUrl = "http://localhost:8080/secured/user";
-const token =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcyMTM2MTM0Nzg5NCwiZXhwIjozNjAwMDAwfQ.7Fj8xm-hiUoYSwIFn3mnkawMrAOpUnIRSxY2XQY_tgU";
-//Token diinput manual
+const token = localStorage.getItem('token');
 
 const listUser = reactive([]);
 const keyword = ref("");
