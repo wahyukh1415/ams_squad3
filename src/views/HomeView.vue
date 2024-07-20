@@ -16,11 +16,6 @@ onMounted(() => {
         <h1 class="w-100">Welcome {{ authUser.name }}, this is homepage</h1>
         <div>
             <button class="btn btn-primary" @click="logout">Logout</button>
-            <button class="btn btn-primary" @click="logout">conflict</button>
-        </div>
-        <div>
-            <button class="btn btn-warning">Colek Rehan</button>
-            <button class="btn btn-secondary">Colek Colek Sony</button>
         </div>
     </div>
 </template>
