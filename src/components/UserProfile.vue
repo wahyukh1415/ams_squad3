@@ -1,8 +1,6 @@
 <script setup>
 import axios from "axios";
 import { onMounted, reactive, ref } from "vue";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap";
 const userProfile = reactive({});
 const emailProfile = ref("");
 const nameProfile = ref("");
