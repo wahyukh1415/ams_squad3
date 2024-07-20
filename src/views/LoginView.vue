@@ -2,6 +2,7 @@
 import { onBeforeMount, watch } from "vue";
 import { storeToRefs } from "pinia";
 import IllustrationLogin from "../components/illustrations/IllustrationLogin.vue";
+import Logo from "../components/logo/Logo.vue"
 import { useLoginStore } from "@/stores/login";
 import { useRouter } from "vue-router";
 
@@ -47,13 +48,13 @@ onBeforeMount(() => {
   <div class="login bg-primary">
     <div class="container col-xl-10 col-xxl-8 px-4">
       <div class="row align-items-center g-lg-5">
-        <div class="position-relative col-lg-7 text-center text-lg-start">
-          <h1 class="display-4 fw-bold lh-1 mb-0 text-white">AuctionVerse</h1>
-          <p class="col-lg-10 fs-4 mb-3 text-white">
+        <div class="position-relative col-lg-7 text-center text-white text-lg-start">
+          <Logo class="logo"/>
+          <p class="col-lg-10 fs-4 mb-3 mb-lg-0">
             Elevate Your Bidding Experience
           </p>
           <div class="d-flex align-items-center justify-content-center">
-            <IllustrationLogin class="illustration text-white" />
+            <IllustrationLogin class="illustration" />
           </div>
         </div>
         <div class="col-md-10 mx-auto col-lg-5">
@@ -136,6 +137,11 @@ onBeforeMount(() => {
 </template>
 
 <style scoped>
+.logo {
+  width: 350px;
+  height: 92.5px;
+}
+
 .illustration {
   display: none;
 }
