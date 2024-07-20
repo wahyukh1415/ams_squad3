@@ -1,4 +1,6 @@
 <script setup>
+import { onMounted, onUnmounted, ref } from "vue";
+
 const props = defineProps({
   content: {
     type: Object,
@@ -7,24 +9,79 @@ const props = defineProps({
 
 const emit = defineEmits(["detailAuction"]);
 
-function show(data) {
-  emit("detailAuction", data);
+function showDetail(content) {
+  emit("detailAuction", content);
 }
+
+function formatPrice(value) {
+  if (typeof value !== "number") {
+    return value;
+  }
+  return value.toLocaleString("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 0,
+  });
+}
+
+// Define the target date for the countdown
+const targetDate = new Date(props.content.endedAt).getTime();
+
+// Create a reactive reference to store the countdown values
+const countdown = ref({
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0
+});
+
+// Function to calculate and update the countdown
+const updateCountdown = () => {
+  const now = new Date().getTime();
+  const distance = targetDate - now;
+
+  if (distance < 0) {
+    countdown.value = { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    clearInterval(interval);
+    return;
+  }
+
+  countdown.value = {
+    days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+    minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+    seconds: Math.floor((distance % (1000 * 60)) / 1000)
+  };
+};
+
+// Set up the interval to update the countdown every second
+let interval;
+onMounted(() => {
+  updateCountdown();
+  interval = setInterval(updateCountdown, 1000);
+});
+
+// Clear the interval when the component is unmounted
+onUnmounted(() => {
+  clearInterval(interval);
+});
 </script>
 
 <template>
-  <div class="card border-0" @click="show(data)">
+  <div class="card h-100 border-0" @click="showDetail(content)">
     <div class="card-header border-0">
       <div class="row">
-        <div class="header-text col-6">Ends in :</div>
-        <div class="header-text col-6 text-end">1:25:25</div>
+        <div class="header-text col-4">Ends in</div>
+        <div class="header-text col-8 text-end">
+          {{ countdown.days }}d {{ countdown.hours }}h {{ countdown.minutes }}m {{ countdown.seconds }}s
+        </div>
       </div>
     </div>
     <div class="card-body">
-      <h5 class="card-title text-secondary">Special title treatment</h5>
+      <h5 class="card-title text-secondary">{{ content.name }}</h5>
       <div class="card-text">
         <p class="mb-0">
-          With supporting text below as a natural lead-in to additional content.
+          {{ content.description }}
         </p>
       </div>
     </div>
@@ -33,7 +90,9 @@ function show(data) {
         <p class="mb-0 text-start text-sm-end col-6 col-sm-12">
           Starting price :
         </p>
-        <p class="card-price mb-0 text-end col-6 col-sm-12">Rp.1.000.000.000</p>
+        <p class="card-price mb-0 text-end col-6 col-sm-12">
+          {{ formatPrice(content.minimumPrice) }}
+        </p>
       </div>
     </div>
   </div>
