@@ -1,4 +1,24 @@
-<script></script>
+<script setup>
+import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
+import { useRegisterStore } from '@/stores/register';
+
+const { registerBuyer } = useRegisterStore();
+const { name, email, password } = storeToRefs(useRegisterStore());
+
+const router = useRouter();
+
+const register = async () => {
+    try {
+        await registerBuyer();
+        alert('Berhasil Menambahkan Akun Buyer');
+        router.push('/');
+    } catch (error) {
+        alert('Gagal Membuat Akun Buyer');
+        console.log(error);
+    }
+};
+</script>
 
 <template>
     <div class="registerContainer">
@@ -7,21 +27,21 @@
                 <router-link class="homeLink" to="/"><i class="bi bi-arrow-left-circle-fill"></i></router-link>
                 <img src="../assets/register.svg" alt="Register Icon" />
             </div>
-            <form action="" class="formRegister form-2">
+            <form class="formRegister form-2">
                 <h4>Tambah Akun Buyer</h4>
                 <div class="inputWrapper">
-                    <div for="nama" class="labelForm">Nama Buyer: <span class="required">*</span></div>
-                    <input type="text" class="inputForm" name="namaBuyer" id="namaBuyer" placeholder="Masukkan Nama" />
+                    <div for="name" class="labelForm">Nama Buyer: <span class="required">*</span></div>
+                    <input type="text" class="inputForm" name="name" v-model="name" id="name" placeholder="Masukkan Nama" />
                 </div>
                 <div class="inputWrapper">
                     <div for="email" class="labelForm">Email Buyer: <span class="required">*</span></div>
-                    <input type="email" class="inputForm" name="emailBuyer" id="emailBuyer" placeholder="Masukkan Email" />
+                    <input type="email" class="inputForm" name="email" v-model="email" id="email" placeholder="Masukkan Email" />
                 </div>
                 <div class="inputWrapper">
                     <div for="password" class="labelForm">Password Buyer: <span class="required">*</span></div>
-                    <input type="password" class="inputForm" name="passwordBuyer" id="passwordBuyer" placeholder="Masukkan Password" />
+                    <input type="password" class="inputForm" name="password" v-model="password" id="password" placeholder="Masukkan Password" />
                 </div>
-                <button type="submit" class="btn btn-primary">Buat Akun Buyer</button>
+                <button class="btn btn-primary" @click.prevent="register">Buat Akun Buyer</button>
                 <div class="divider">atau</div>
                 <router-link to="/register-seller">
                     <a href="#" id="linkSeller">Buat Akun Seller</a>
