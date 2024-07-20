@@ -36,3 +36,17 @@ $btn-border-radius-lg:50px;
 
 // Import Bootstrap
 @import 'bootstrap/scss/bootstrap'; // Custom styles
+
+:root {
+    --color-primary-50: #f5f7fa;
+    --color-primary-100: #e9edf5;
+    --color-primary-200: #cfd9e8;
+    --color-primary-300: #a4b9d5;
+    --color-primary-400: #7494bc;
+    --color-primary-500: #5277a5;
+    --color-primary-600: #3f5e8a;
+    --color-primary-700: #344c70;
+    --color-primary-800: #2e415e;
+    --color-primary-900: #2a3950;
+    --color-primary-950: #1c2535;
+}
