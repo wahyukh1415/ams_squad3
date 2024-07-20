@@ -3,6 +3,8 @@ import HomeView from "../views/HomeView.vue";
 import UserView from "../components/UserProfile.vue";
 import LoginView from '../views/LoginView.vue'
 import Dashboard from '../views/DashboarAdmin.vue'
+import RegisterBuyer from '../views/RegisterBuyer.vue'
+import RegisterSeller from '../views/RegisterSeller.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,11 +20,6 @@ const router = createRouter({
       component: UserView,
     },
     {
-      path: '/register',
-      name: 'register',
-      component: () => import('../views/Register.vue'),
-    },
-    {
       path: '/login',
       name: 'login',
       component: LoginView,
@@ -30,12 +27,12 @@ const router = createRouter({
     {
       path: '/register-seller',
       name: 'register seller',
-      component: () => import('../views/RegisterSeller.vue')
+      component: RegisterSeller,
     },
     {
       path: '/register-buyer',
       name: 'register buyer',
-      component: () => import('../views/RegisterBuyer.vue')
+      component: RegisterBuyer,
     },
     {
       path: '/dashboard',
