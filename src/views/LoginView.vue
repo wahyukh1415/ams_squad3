@@ -1,23 +1,18 @@
 <script setup>
-import { onBeforeMount, watch } from "vue";
-import { storeToRefs } from "pinia";
+import { onMounted, watch, ref, computed } from "vue";
+import axios from "axios";
 import IllustrationLogin from "../components/illustrations/IllustrationLogin.vue";
-import Logo from "../components/logo/Logo.vue"
-import { useLoginStore } from "@/stores/login";
+import Logo from "../components/logo/Logo.vue";
 import { useRouter } from "vue-router";
 
-const {
-  loading,
-  email,
-  password,
-  hidePassword,
-  passwordFieldIcon,
-  passwordFieldType,
-  emailError,
-  passwordError,
-} = storeToRefs(useLoginStore());
-const { login } = useLoginStore();
 const router = useRouter();
+const loading = ref(false);
+
+const email = ref('');
+const password = ref('');
+const emailError = ref('');
+const passwordError = ref('');
+const token = ref('');
 
 watch(email, (value) => {
   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
@@ -29,6 +24,14 @@ watch(email, (value) => {
   }
 });
 
+const hidePassword = ref(true);
+const passwordFieldIcon = computed(() =>
+  hidePassword.value ? "bi-eye" : "bi-eye-slash"
+);
+const passwordFieldType = computed(() =>
+  hidePassword.value ? "password" : "text"
+);
+
 watch(password, (value) => {
   if (!value) {
     passwordError.value = "Password cannot be empty";
@@ -37,19 +40,78 @@ watch(password, (value) => {
   }
 });
 
-onBeforeMount(() => {
-  if (localStorage.getItem("token")) {
+onMounted(() => {
+  if (localStorage.getItem("auth-user")) {
     router.push({ name: "home" });
   }
 });
+
+function login() {
+  if (
+    (!emailError.value || emailError.value == "Email atau password salah") &&
+    !passwordError.value
+  ) {
+    authenticate();
+  }
+}
+
+async function authenticate() {
+  loading.value = true;
+
+  const body = {};
+
+  body.email = email.value;
+  body.password = password.value;
+
+  await axios({
+    method: "post",
+    url: "http://localhost:8080/login",
+    data: body,
+  })
+    .then(function (response) {
+      // handle success
+      if (response.data.code == '0800') {
+        token.value = response.data.data.token;
+
+        getUser();
+
+        router.push({ name: "home" }).then(() => {
+          router.go(0);
+        });
+      } else {
+        emailError.value = response.data.message;
+        password.value = "";
+      }
+      loading.value = false;
+    })
+    .catch(function (error) {
+      // handle error
+    });
+}
+
+async function getUser() {
+  await axios({
+    method: "get",
+    url: "http://127.0.0.1:8080/secured/user/current",
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+  }).then(function (response) {
+    const data = response.data.data;
+    data["token"] = `Bearer ${token.value}`;
+    localStorage.setItem("auth-user", JSON.stringify(data));
+  });
+}
 </script>
 
 <template>
   <div class="login bg-primary">
     <div class="container col-xl-10 col-xxl-8 px-4">
       <div class="row align-items-center g-lg-5">
-        <div class="position-relative col-lg-7 text-center text-white text-lg-start">
-          <Logo class="logo"/>
+        <div
+          class="position-relative col-lg-7 text-center text-white text-lg-start"
+        >
+          <Logo class="logo" />
           <p class="col-lg-10 fs-4 mb-3 mb-lg-0">
             Elevate Your Bidding Experience
           </p>
@@ -138,8 +200,10 @@ onBeforeMount(() => {
 
 <style scoped>
 .logo {
-  width: 350px;
-  height: 92.5px;
+  max-width: 350px;
+  width: 100%;
+  max-height: 92.5px;
+  height: 100%;
 }
 
 .illustration {

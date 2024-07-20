@@ -1,29 +1,19 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/stores/auth';
 
-const router = useRouter();
-const authUser = ref(JSON.parse(localStorage.getItem('auth-user')));
+const { authUser } = storeToRefs(useAuthStore());
+const { authCheck, logout } = useAuthStore();
 
 onMounted(() => {
-    if (!localStorage.getItem('token') && !localStorage.getItem('auth-user')) {
-        router.push({ name: 'login' });
-    }
+    authCheck();
 });
-
-function logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('auth-user');
-
-    router.push({ name: 'login' }).then(() => {
-        router.go(0);
-    });
-}
 </script>
 
 <template>
     <div class="p-4 d-flex align-items-center">
-        <h1 v-if="authUser" class="w-100">Welcome {{ authUser.name }}, this is homepage</h1>
+        <h1 class="w-100">Welcome {{ authUser.name }}, this is homepage</h1>
         <div>
             <button class="btn btn-primary" @click="logout">Logout</button>
             <button class="btn btn-primary" @click="logout">conflict</button>
