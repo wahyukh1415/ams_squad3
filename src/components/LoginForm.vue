@@ -44,7 +44,7 @@ const validatePassword = (password) => {
 
 onMounted(() => {
   if (localStorage.getItem("auth-user")) {
-    router.push({ name: "home" });
+    router.back();
   }
 });
 
