@@ -7,6 +7,8 @@ import { RouterLink } from 'vue-router';
 const { authUser } = storeToRefs(useAuthStore());
 const { authCheck, logout } = useAuthStore();
 
+const role = authUser.value.role;
+
 onMounted(() => {
     authCheck();
 });
