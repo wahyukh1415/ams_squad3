@@ -5,6 +5,9 @@ const props = defineProps({
   content: {
     type: Object,
   },
+  type: {
+    type: String,
+  }
 });
 
 const emit = defineEmits(["detailAuction"]);
@@ -68,10 +71,40 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="card h-100 border-0" @click="showDetail(content)">
+  <div v-if="type == 'active'" class="card h-100 border-0" @click="showDetail(content)">
     <div class="card-header border-0">
       <div class="row">
         <div class="header-text col-4">Ends in</div>
+        <div class="header-text col-8 text-end">
+          {{ countdown.hours }}h {{ countdown.minutes }}m {{ countdown.seconds }}s
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title text-secondary">{{ content.name }}</h5>
+      <div class="card-text">
+        <p class="mb-0">
+          {{ content.description }}
+        </p>
+      </div>
+    </div>
+    <div class="card-footer border-0 pt-0 bg-white text-secondary text-end">
+      <div class="row">
+        <p class="mb-0 text-start text-sm-end col-6 col-sm-12">
+          Starting price :
+        </p>
+        <p class="card-price mb-0 text-end col-6 col-sm-12">
+          {{ formatPrice(content.minimumPrice) }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Coming Soon -->
+  <div v-if="type == 'coming-soon'" class="card h-100 border-0" @click="showDetail(content)">
+    <div class="card-header border-0">
+      <div class="row">
+        <div class="header-text col-4">Start in</div>
         <div class="header-text col-8 text-end">
           {{ countdown.days }}d {{ countdown.hours }}h {{ countdown.minutes }}m {{ countdown.seconds }}s
         </div>
