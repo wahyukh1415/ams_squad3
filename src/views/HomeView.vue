@@ -3,7 +3,9 @@ import { onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
 
-import ListAuction from '@/components/HomeListAuction.vue'
+import HomeActiveAuction from '@/components/HomeActiveAuction.vue';
+import HomeComingAuction from '@/components/HomeComingAuction.vue';
+import HomeEndedAuction from '@/components/HomeEndedAuction.vue';
 import { RouterLink } from 'vue-router';
 
 const { authUser } = storeToRefs(useAuthStore());
@@ -24,5 +26,7 @@ onMounted(() => {
             <button class="btn btn-primary" @click="logout">Logout</button>
         </div>
     </div>
-    <ListAuction/>
+    <HomeActiveAuction/>
+    <HomeComingAuction/>
+    <HomeEndedAuction/>
 </template>
