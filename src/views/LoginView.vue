@@ -1,6 +1,16 @@
 <script setup>
+import { onMounted } from "vue";
+import { useRouter } from "vue-router";
 import LoginHeader from "@/components/LoginHeader.vue";
 import LoginForm from "@/components/LoginForm.vue"
+
+const router = useRouter()
+
+onMounted(() => {
+  if (localStorage.getItem("auth-user")) {
+    router.back();
+  }
+});
 </script>
 
 <template>

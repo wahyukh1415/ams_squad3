@@ -1,18 +1,53 @@
 <script setup>
-import { storeToRefs } from 'pinia';
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useRegisterStore } from '@/stores/register';
+import { useAuthStore } from '@/stores/auth';
+import { storeToRefs } from 'pinia';
 
-const { registerSeller } = useRegisterStore();
-const { name, email, password } = storeToRefs(useRegisterStore());
+const { authUser } = storeToRefs(useAuthStore());
+const { authCheck } = useAuthStore();
 
+const name = ref('');
+const email = ref('');
+const password = ref('');
 const router = useRouter();
+
+async function registerSeller() {
+    const auth = authUser.value.token;
+    const body = {
+        name: name.value,
+        email: email.value,
+        password: password.value,
+    };
+    try {
+        const response = await axios.post('http://127.0.0.1:8080/secured/user/register-seller', body, {
+            headers: {
+                Authorization: auth,
+            },
+        });
+        if (response.status === 200 || response.status === 201) {
+            console.log(response.data);
+            return response.data;
+        } else {
+            throw new Error('Failed to register user');
+        }
+    } catch (error) {
+        console.error('Error during registration:', error);
+        throw error;
+    }
+}
+
+onMounted(() => {
+    authCheck();
+});
 
 const register = async () => {
     try {
         await registerSeller();
+        console.log(authUser.value);
         alert('Berhasil Menambahkan Akun Seller');
-        router.push('/');
+        router.push('/dashboard');
     } catch (error) {
         alert('Gagal Membuat Akun Seller');
         console.log(error);

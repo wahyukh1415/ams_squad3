@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, watch, ref, reactive, computed } from "vue";
+import { watch, ref, reactive, computed } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
@@ -41,12 +41,6 @@ const validatePassword = (password) => {
     errors.password = "";
   }
 };
-
-onMounted(() => {
-  if (localStorage.getItem("auth-user")) {
-    router.push({ name: "home" });
-  }
-});
 
 watch(() => data.email, validateEmail);
 watch(() => data.password, validatePassword);
