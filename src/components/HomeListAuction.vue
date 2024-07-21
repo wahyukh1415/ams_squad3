@@ -8,8 +8,26 @@ import AuctionCard from "@/components/AuctionCard.vue";
 const { authUser } = storeToRefs(useAuthStore());
 const { authCheck } = useAuthStore();
 const auctions = reactive([]);
-const approvedAuctions = computed(() => {
-  return auctions.filter((auction) => auction.status === "APPROVED");
+
+const activeAuctions = computed(() => {
+  return auctions.filter(
+    (auction) =>
+      auction.status === "APPROVED" && isDatePassed(auction.startedAt)
+  );
+});
+
+const comingAuctions = computed(() => {
+  return auctions.filter(
+    (auction) =>
+      auction.status === "APPROVED" && !isDatePassed(auction.startedAt)
+  );
+});
+
+const endedAuctions = computed(() => {
+  return auctions.filter(
+    (auction) =>
+      auction.status === "APPROVED" && isDatePassed(auction.endedAt)
+  );
 });
 
 onMounted(() => {
@@ -32,22 +50,51 @@ async function getAuction() {
 function action(auction) {
   alert(auction.name);
 }
+
+function isDatePassed(date) {
+  const givenDate = new Date(date);
+  const currentDate = new Date();
+
+  return currentDate > givenDate;
+}
 </script>
 
 <template>
   <section class="py-5 bg-primary">
     <div class="container">
       <div class="text-center text-white mb-4">
-        <h1 class="section-title mb-0">Active Auction</h1>
+        <h1 class="section-title mb-0">Active Auctions</h1>
         <h5>Don't Miss Out on Unique Items!</h5>
       </div>
       <div class="row gy-4 gx-4">
         <div
-          v-for="auction in approvedAuctions"
+          v-for="auction in activeAuctions"
           :key="auction.id"
           class="col-12 col-sm-6 col-md-4"
         >
           <AuctionCard
+            :type="'active'"
+            :content="auction"
+            @detail-auction="action"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="py-5 bg-primary-200">
+    <div class="container">
+      <div class="text-center text-white mb-4">
+        <h1 class="section-title text-primary mb-0">Coming Soon</h1>
+        <h5>Don't Miss Out on Unique Items!</h5>
+      </div>
+      <div class="row gy-4 gx-4">
+        <div
+          v-for="auction in comingAuctions"
+          :key="auction.id"
+          class="col-12 col-sm-6 col-md-4"
+        >
+          <AuctionCard
+            :type="'coming-soon'"
             :content="auction"
             @detail-auction="action"
           />
