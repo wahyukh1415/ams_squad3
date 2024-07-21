@@ -46,7 +46,7 @@ const register = async () => {
     try {
         await registerBuyer();
         alert('Berhasil Menambahkan Akun Buyer');
-        router.push('/register-buyer');
+        router.push('/dashboard');
     } catch (error) {
         alert('Gagal Membuat Akun Buyer');
         console.log(error);

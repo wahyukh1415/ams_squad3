@@ -47,7 +47,7 @@ const register = async () => {
         await registerSeller();
         console.log(authUser.value);
         alert('Berhasil Menambahkan Akun Seller');
-        router.push('/register-seller');
+        router.push('/dashboard');
     } catch (error) {
         alert('Gagal Membuat Akun Seller');
         console.log(error);
