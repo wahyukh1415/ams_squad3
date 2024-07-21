@@ -6,6 +6,7 @@ import LoginView from "../views/LoginView.vue";
 import Dashboard from "../views/DashboarAdmin.vue";
 import RegisterBuyer from "../views/RegisterBuyer.vue";
 import RegisterSeller from "../views/RegisterSeller.vue";
+import createAuction from "../views/CreateAuction.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,10 +42,15 @@ const router = createRouter({
       component: Dashboard,
     },
     {
-      path: "reset-password",
+      path: "/reset-password",
       name: "reset-password",
       component: ResetPassword,
     },
+    {
+      path: "/create-auction",
+      name: "create auction",
+      component: createAuction,
+    }
   ],
 });
 
