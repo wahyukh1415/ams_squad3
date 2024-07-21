@@ -1,55 +1,8 @@
 <script setup>
-import axios from "axios";
-import { onMounted, reactive, ref } from "vue";
-const userProfile = reactive({});
-const emailProfile = ref("");
-const nameProfile = ref("");
-
-onMounted(() => {
-  getUser();
-});
-const token =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjUsInJvbGUiOiJTRUxMRVIiLCJpYXQiOjE3MjEzODQ4MDI3NzMsImV4cCI6MzYwMDAwMH0.uBckonYV71yzFISLJ3QRRI8GENtDWv_5iXK3VzxckRM";
-async function getUser() {
-  const auth = token;
-  const response = await axios.get(
-    "http://127.0.0.1:8080/secured/user/current",
-    {
-      headers: {
-        Authorization: `Bearer ${auth}`,
-      },
-    }
-  );
-  const responseJson = response.data.data;
-  userProfile.name = responseJson.name;
-  userProfile.email = responseJson.email;
-  userProfile.role = responseJson.role;
-  console.log(responseJson);
-}
-
-async function updateProfile() {
-  const auth = token;
-  const coba = {};
-
-  coba.name = nameProfile.value;
-  coba.email = emailProfile.value;
-
-  const response = await axios.put(
-    "http://127.0.0.1:8080/secured/user/update-profile",
-    coba,
-    {
-      headers: {
-        Authorization: `Bearer ${auth}`,
-      },
-    }
-  );
-
-  console.log(response);
-  location.reload();
-  // userProfie.name = responseJson.name;
-  // userProfile.email = responseJson.email;
-  // userProfile.role = responseJson.role;
-}
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/stores/auth";
+const { authUser } = storeToRefs(useAuthStore());
+import ProfileSettings from "./ProfileSettings.vue";
 </script>
 
 <template>
@@ -65,126 +18,19 @@ async function updateProfile() {
           height="100"
           alt="profile-image"
         />
-        <h2>{{ userProfile.name }}</h2>
+        <h2>{{ authUser.name }}</h2>
       </div>
       <ul class="list-profile d-flex gap-5">
-        <li v-if="userProfile.role === 'SELLER'">Selling</li>
-        <li v-else-if="userProfile.role === 'BUYER'">Bidding</li>
+        <li v-if="authUser.role === 'SELLER'">Selling</li>
+        <li v-else-if="authUser.role === 'BUYER'">Bidding</li>
         <li v-else>Dashboard</li>
         <li>Interest</li>
         <li class="active">Settings</li>
       </ul>
     </div>
-    <section class="settings d-flex flex-column gap-5 container mt-5">
-      <div class="nav-settings">
-        <h3>Details</h3>
-      </div>
-      <div class="detail-profile">
-        <div
-          class="profile-head mb-2 row justify-content-between align-items-center"
-        >
-          <h3 class="col-8">User Profile</h3>
-          <div class="btn-edit col-4 text-end">
-            <button
-              type="button"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-            >
-              EDIT
-            </button>
-          </div>
-          <!-- MODAL -->
-          <div
-            class="modal fade"
-            id="exampleModal"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
-            <div class="modal-dialog modal-dialog-scrollable">
-              <div class="modal-content">
-                <div class="modal-header border border-0 mx-2">
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div class="modal-body">
-                  <h1
-                    class="modal-title fw-semibold fs-3 mb-5 text-center"
-                    id="exampleModalLabel"
-                  >
-                    Update Profile
-                  </h1>
-                  <form action="">
-                    <div class="form-group">
-                      <label for="username">NAME</label>
-                      <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        v-model="nameProfile"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="email">EMAIL</label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        v-model="emailProfile"
-                      />
-                    </div>
-                  </form>
-                </div>
-                <div
-                  class="footerModal d-flex gap-3 px-3 pb-3 justify-content-between"
-                >
-                  <button
-                    type="button"
-                    class="btn fw-semibold py-3 w-100 border border-1 border-dark"
-                    data-bs-dismiss="modal"
-                  >
-                    CANCEL
-                  </button>
-                  <button
-                    @click="updateProfile"
-                    type="submit"
-                    class="btn fw-semibold btn-primary w-100"
-                  >
-                    SAVE
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- END MODAL -->
-        </div>
-        <p class="my-4 line-profile-group"></p>
-        <div class="wrapper-profile row">
-          <div class="col-4"></div>
-          <div class="content-profile col-8">
-            <div class="profile-group row">
-              <p class="user-name col-md-5">NAME</p>
-              <p class="col-md-7">{{ userProfile.name }}</p>
-            </div>
-            <p class="my-4 line-profile-group"></p>
-            <div class="profile-group row">
-              <p class="user-email col-md-5">EMAIL</p>
-              <p class="col-md-7">{{ userProfile.email }}</p>
-            </div>
-            <p class="my-4 line-profile-group"></p>
-            <div class="profile-group row">
-              <p class="user-password col-md-5">ROLE</p>
-              <p class="col-md-7">{{ userProfile.role }}</p>
-            </div>
-            <p class="my-4 line-profile-group"></p>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- settings section -->
+    <ProfileSettings />
+    <!-- akhir settings -->
   </div>
 </template>
 
@@ -232,7 +78,7 @@ ul {
   background-color: white; /* Warna garis bawah saat dihover */
 }
 
-/* settings */
+/* setting */
 .nav-settings {
   margin-bottom: 48px;
 }
@@ -284,11 +130,11 @@ ul {
 }
 
 /* modal */
-.form-group {
+#form-modal {
   display: flex;
   flex-direction: column;
-  position: relative;
-  margin-bottom: 24px;
+  gap: 24px;
+  margin-bottom: 12px;
 }
 .form-group label {
   position: absolute;
@@ -301,5 +147,10 @@ ul {
 .form-group input {
   padding: 15px;
   border: 1px solid black;
+}
+.resetPass p {
+  text-decoration: underline;
+  color: black;
+  font-weight: 500;
 }
 </style>
