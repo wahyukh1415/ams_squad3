@@ -1,18 +1,29 @@
 <script setup>
 import { useAuctionStore } from "@/stores/auction";
 import { storeToRefs } from "pinia";
-import AuctionCard from "./AuctionCard.vue";
+import AuctionCard from "./AuctionCardComing.vue";
 
 const { comingAuctions } = storeToRefs(useAuctionStore());
 const { openAuction } = useAuctionStore();
 </script>
 
 <template>
-  <section class="py-5 bg-primary-200">
+  <section id="coming-auction" class="py-5 bg-primary-600">
     <div class="container">
-      <div class="text-center text-white mb-4">
-        <h1 class="section-title text-primary mb-0">Coming Soon</h1>
-        <h5>Don't Miss Out on Unique Items!</h5>
+      <div class="text-start text-white mb-4 row">
+        <h1 class="section-title text-white my-0 pe-5 col-6">
+          Upcoming Auctions and New Bidding Opportunities
+        </h1>
+        <div class="d-flex align-items-center ps-5 col-6">
+          <div class="paragraph">
+            <hr class="w-25 border-3" />
+            <p>
+              Stay ahead of the game with our upcoming auctions. Discover the
+              latest opportunities to place your bids on new and exciting items.
+              Check back often so you don’t miss out!
+            </p>
+          </div>
+        </div>
       </div>
       <div class="row gy-4 gx-4">
         <div
@@ -33,7 +44,7 @@ const { openAuction } = useAuctionStore();
 
 <style scoped>
 .section-title {
-  font-weight: 900;
-  letter-spacing: 4px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
 }
 </style>

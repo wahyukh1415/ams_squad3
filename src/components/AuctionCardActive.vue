@@ -4,9 +4,11 @@ import { onMounted, onUnmounted, ref } from "vue";
 const props = defineProps({
   content: {
     type: Object,
-  },
-  type: {
-    type: String,
+    default: {
+      name: 'Title',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi similique architecto nostrum nisi asperiores repellendus sit dicta tenetur sunt quas! Eum eveniet fugit corporis, ea fuga debitis vel quaerat similique?',
+      endedAt: '2024-08-16T05:00:00Z'
+    }
   }
 });
 
@@ -57,6 +59,27 @@ const updateCountdown = () => {
   };
 };
 
+function auctionDuration(startDateString, endDateString) {
+  // Parse the date strings into Date objects
+  const startDate = new Date(startDateString);
+  const endDate = new Date(endDateString);
+  
+  // Calculate the difference in milliseconds
+  const differenceInMilliseconds = endDate - startDate;
+  
+  // Convert milliseconds to hours
+  const millisecondsPerHour = 1000 * 60 * 60;
+  const differenceInHours = differenceInMilliseconds / millisecondsPerHour;
+  
+  return differenceInHours;
+}
+
+function ucwords (str) {
+    return (str.toLowerCase()).replace(/^([a-z])|\s+([a-z])/g, function (value) {
+        return value.toUpperCase();
+    });
+}
+
 // Set up the interval to update the countdown every second
 let interval;
 onMounted(() => {
@@ -71,7 +94,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-if="type == 'active'" class="card h-100 border-0" @click="showDetail(content)">
+  <div class="card d-inline-block h-100 border-0" @click="showDetail(content)">
     <div class="card-header border-0">
       <div class="row">
         <div class="header-text col-4">Ends in</div>
@@ -81,7 +104,7 @@ onUnmounted(() => {
       </div>
     </div>
     <div class="card-body">
-      <h5 class="card-title text-secondary">{{ content.name }}</h5>
+      <h5 class="card-title text-secondary">{{ ucwords(content.name) }}</h5>
       <div class="card-text">
         <p class="mb-0">
           {{ content.description }}
@@ -97,34 +120,12 @@ onUnmounted(() => {
           {{ formatPrice(content.minimumPrice) }}
         </p>
       </div>
-    </div>
-  </div>
-
-  <!-- Coming Soon -->
-  <div v-if="type == 'coming-soon'" class="card h-100 border-0" @click="showDetail(content)">
-    <div class="card-header border-0">
-      <div class="row">
-        <div class="header-text col-4">Start in</div>
-        <div class="header-text col-8 text-end">
-          {{ countdown.days }}d {{ countdown.hours }}h {{ countdown.minutes }}m {{ countdown.seconds }}s
-        </div>
-      </div>
-    </div>
-    <div class="card-body">
-      <h5 class="card-title text-secondary">{{ content.name }}</h5>
-      <div class="card-text">
-        <p class="mb-0">
-          {{ content.description }}
-        </p>
-      </div>
-    </div>
-    <div class="card-footer border-0 pt-0 bg-white text-secondary text-end">
-      <div class="row">
+      <div class="row mt-2">
         <p class="mb-0 text-start text-sm-end col-6 col-sm-12">
-          Starting price :
+          Highest Bid :
         </p>
         <p class="card-price mb-0 text-end col-6 col-sm-12">
-          {{ formatPrice(content.minimumPrice) }}
+          {{ content.highestBid !== 0 ? formatPrice(content.highestBid) : '-' }}
         </p>
       </div>
     </div>
@@ -152,6 +153,10 @@ onUnmounted(() => {
 
 .header-text {
   font-weight: 600;
+}
+
+.card-text {
+  font-size: small;
 }
 
 .card-title {
