@@ -26,12 +26,12 @@ async function registerBuyer() {
                 Authorization: auth,
             },
         });
-        // if (response.status === 200 || response.status === 201) {
-        //     console.log(response.data);
-        //     return response.data;
-        // } else {
-        //     throw new Error('Failed to register user');
-        // }
+        if (response.status === 200 || response.status === 201) {
+            console.log(response.data);
+            return response.data;
+        } else {
+            throw new Error('Failed to register user');
+        }
     } catch (error) {
         console.error('Error during registration:', error);
         throw error;
@@ -46,7 +46,7 @@ const register = async () => {
     try {
         await registerBuyer();
         alert('Berhasil Menambahkan Akun Buyer');
-        router.push('/register-buyer');
+        router.push('/dashboard');
     } catch (error) {
         alert('Gagal Membuat Akun Buyer');
         console.log(error);

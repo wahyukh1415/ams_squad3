@@ -9,19 +9,23 @@ const { authUser } = storeToRefs(useAuthStore());
 const { authCheck } = useAuthStore();
 
 const name = ref('');
-const email = ref('');
-const password = ref('');
+const description = ref('');
+const minimumPrice = ref('');
+const startedAt = ref('');
+const endedAt = ref('');
 const router = useRouter();
 
-async function registerSeller() {
+async function createAuction() {
     const auth = authUser.value.token;
     const body = {
         name: name.value,
-        email: email.value,
-        password: password.value,
+        description: description.value,
+        minimumPrice: minimumPrice.value,
+        startedAt: new Date(startedAt.value).toISOString(),
+        endedAt: new Date(endedAt.value).toISOString(),
     };
     try {
-        const response = await axios.post('http://127.0.0.1:8080/secured/user/register-seller', body, {
+        const response = await axios.post('http://127.0.0.1:8080/secured/auction/create', body, {
             headers: {
                 Authorization: auth,
             },
@@ -42,14 +46,13 @@ onMounted(() => {
     authCheck();
 });
 
-const register = async () => {
+const create = async () => {
     try {
-        await registerSeller();
-        console.log(authUser.value);
-        alert('Berhasil Menambahkan Akun Seller');
-        router.push('/dashboard');
+        await createAuction();
+        alert('Berhasil Membuat Lelang Baru');
+        router.push('/');
     } catch (error) {
-        alert('Gagal Membuat Akun Seller');
+        alert('Gagal Membuat Lelang Baru');
         console.log(error);
     }
 };
@@ -60,25 +63,31 @@ const register = async () => {
         <div class="cardRegister">
             <div class="back d-flex flex-column">
                 <router-link class="homeLink" to="/"><i class="bi bi-arrow-left-circle-fill"></i></router-link>
-                <img src="../assets/register.svg" alt="Register Icon" />
+                <img src="../assets/auction.svg" alt="Register Icon" />
             </div>
-            <form action="#" class="formRegister form-1">
-                <h4>Tambah Akun Seller</h4>
+            <form class="formRegister form-2">
+                <h4>Formulir Lelang Baru</h4>
                 <div class="inputWrapper">
-                    <div for="nama" class="labelForm">Nama Seller: <span class="required">*</span></div>
-                    <input type="text" class="inputForm" name="name" v-model="name" id="name" placeholder="Masukkan Nama" />
+                    <div for="name" class="labelForm">Nama Lelang: <span class="required">*</span></div>
+                    <input type="text" class="inputForm" name="name" v-model="name" id="name" placeholder="Nama Lelang..." />
                 </div>
                 <div class="inputWrapper">
-                    <div for="email" class="labelForm">Email Seller: <span class="required">*</span></div>
-                    <input type="email" class="inputForm" name="email" v-model="email" id="email" placeholder="Masukkan Email" />
+                    <div for="description" class="labelForm">Deskripsi: <span class="required">*</span></div>
+                    <input type="text" class="inputForm" name="description" v-model="description" id="description" placeholder="Deskripsi Lelang..." />
                 </div>
                 <div class="inputWrapper">
-                    <div for="password" class="labelForm">Password Seller: <span class="required">*</span></div>
-                    <input type="password" class="inputForm" name="password" v-model="password" id="password" placeholder="Masukkan Password" />
+                    <div for="minimumPrice" class="labelForm">Harga Minimum: <span class="required">*</span></div>
+                    <input type="number" class="inputForm" name="minimumPrice" v-model="minimumPrice" id="minimumPrice" placeholder="100.000.000" />
                 </div>
-                <button type="submit" class="btn btn-primary" @click.prevent="register">Buat Akun Seller</button>
-                <div class="divider">atau</div>
-                <router-link to="/register-buyer"><a class="nav-link" href="">Buat Akun Buyer</a> </router-link>
+                <div class="inputWrapper">
+                    <div for="startedAt" class="labelForm">Tanggal Mulai: <span class="required">*</span></div>
+                    <input type="datetime-local" class="inputForm" name="startedAt" v-model="startedAt" id="startedAt" placeholder="Tanggal Mulai" />
+                </div>
+                <div class="inputWrapper">
+                    <div for="endedAt" class="labelForm">Tanggal Selesai: <span class="required">*</span></div>
+                    <input type="datetime-local" class="inputForm" name="endedAt" v-model="endedAt" id="endedAt" placeholder="Tanggal Selesai" />
+                </div>
+                <button class="btn btn-primary" @click.prevent="create">Tambah Lelang Baru</button>
             </form>
         </div>
     </div>

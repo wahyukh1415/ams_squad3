@@ -3,8 +3,11 @@ import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
 
-import HomeActiveAuction from "@/components/HomeActiveAuction.vue";
-import HomeComingAuction from "@/components/HomeComingAuction.vue";
+import HomeActiveAuction from '@/components/HomeActiveAuction.vue';
+import HomeComingAuction from '@/components/HomeComingAuction.vue';
+import Footer from '@/components/Footer.vue';
+
+import { RouterLink } from 'vue-router';
 
 const { authUser } = storeToRefs(useAuthStore());
 const { authCheck, logout } = useAuthStore();
@@ -15,18 +18,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- ini bukan navbar, nanti diganti navbar -->
-  <div class="bg-primary-700">
-    <div class="container py-4 d-flex align-items-center">
-      <p class="fw-semibold text-white mb-0 me-auto">
-        Welcome {{ authUser.name }}, this is homepage
-      </p>
-      <div class="d-flex gap-2">
-        <button class="btn btn-light" @click="logout">Logout</button>
-      </div>
-    </div>
-  </div>
-  <!-- --- -->
   <section id="hero" class="container">
     <div class="row px-4 px-md-0">
       <h1 class="heading col-12 col-md-6">Bids Beyond Boundaries</h1>
@@ -44,6 +35,11 @@ onMounted(() => {
   </section>
   <HomeActiveAuction />
   <HomeComingAuction />
+    <router-link to="/create-auction" class="btn btn-primary cta-seller d-flex flex-row align-items-center" style="right: 0; bottom: 0; position: fixed; margin: 30px; cursor: pointer; z-index: 999; border: 1px solid #1c5fa8">
+        <i class="bi bi-plus-circle-fill icon-auction" style="font-size: 30px"></i>
+        <span class="ms-2">Create New Auction</span>
+    </router-link>
+    <Footer />
 </template>
 
 <style scoped>
