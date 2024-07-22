@@ -103,10 +103,10 @@ const getRowNumber = (index) => {
           placeholder="Search"
         />
       </div>
-      <button class="btn btn-primary" title="Add User">
+      <!-- <button class="btn btn-primary" title="Add User">
         <i class="bi bi-person-plus-fill"></i>
         <span class="register-button"> Register</span>
-      </button>
+      </button> -->
     </div>
     <table class="table table-bordered">
       <thead>
