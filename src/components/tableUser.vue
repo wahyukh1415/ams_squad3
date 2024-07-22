@@ -8,11 +8,14 @@ const { authUser } = storeToRefs(useAuthStore());
 const { authCheck } = useAuthStore();
 
 const baseUrl = "http://localhost:8080/secured/user";
-// const token = localStorage.getItem('token');
 
 const listUser = reactive([]);
 const keyword = ref("");
 const filteredUsers = ref([]);
+
+const currentPage = ref(1);
+const itemsPerPage = 10;
+const hasMoreData = ref(true);
 
 const searchUsers = () => {
   if (!keyword.value) {
@@ -26,15 +29,21 @@ const searchUsers = () => {
 
 watch(keyword, searchUsers);
 
-const getListUser = async () => {
-  const res = await axios.get(`${baseUrl}/list?page=1&size=100`, {
-    headers: {
-      Authorization: authUser.value.token,
-    },
-  });
+const getListUser = async (page = 1) => {
+  const res = await axios.get(
+    `${baseUrl}/list?page=${page}&size=${itemsPerPage}`,
+    {
+      headers: {
+        Authorization: authUser.value.token,
+      },
+    }
+  );
 
   listUser.push(...res.data.data);
   filteredUsers.value = listUser;
+
+  currentPage.value = page;
+  hasMoreData.value = res.data.data.length === itemsPerPage; // If less than itemsPerPage, assume no more data
 };
 
 const deleteUser = (name) => {
@@ -62,6 +71,24 @@ onBeforeMount(() => {
   authCheck();
   getListUser();
 });
+
+const nextPage = () => {
+  if (hasMoreData.value) {
+    listUser.length = 0;
+    getListUser(currentPage.value + 1);
+  }
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    listUser.length = 0;
+    getListUser(currentPage.value - 1);
+  }
+};
+
+const getRowNumber = (index) => {
+  return (currentPage.value - 1) * itemsPerPage + index + 1; //keeps the numbers in the next table in sequence
+};
 </script>
 
 <template>
@@ -91,12 +118,12 @@ onBeforeMount(() => {
       </thead>
       <tbody>
         <tr v-for="(data, index) in filteredUsers" :key="index">
-          <td>{{ index + 1 }}</td>
+          <td>{{ getRowNumber(index) }}</td>
           <td>{{ data.name }}</td>
           <td>
             <button
               class="btn btn-danger"
-              v-bind:disabled="data.name === 'Admin'"
+              :disabled="data.name === 'Admin'"
               @click="deleteUser(data.name)"
               title="Delete User"
             >
@@ -109,6 +136,23 @@ onBeforeMount(() => {
         </tr>
       </tbody>
     </table>
+    <div class="pagination-wrapper">
+      <button
+        class="btn btn-secondary"
+        :disabled="currentPage === 1"
+        @click="prevPage"
+      >
+        Previous
+      </button>
+      <span>Page {{ currentPage }}</span>
+      <button
+        class="btn btn-secondary"
+        :disabled="!hasMoreData"
+        @click="nextPage"
+      >
+        Next
+      </button>
+    </div>
   </div>
 </template>
 
@@ -135,6 +179,17 @@ th {
 
 .table {
   text-align: center;
+}
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px;
+}
+
+.pagination-wrapper button {
+  margin: 0 10px;
 }
 
 @media only screen and (min-width: 768px) {
