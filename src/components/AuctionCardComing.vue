@@ -25,7 +25,7 @@ function formatPrice(value) {
 }
 
 // Define the target date for the countdown
-const targetDate = new Date(props.content.endedAt).getTime();
+const targetDate = new Date(props.content.startedAt).getTime();
 
 // Create a reactive reference to store the countdown values
 const countdown = ref({

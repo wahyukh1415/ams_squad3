@@ -94,7 +94,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="card d-inline-block h-100 border-0" @click="showDetail(content)">
+  <div class="card h-100 border-0" @click="showDetail(content)">
     <div class="card-header border-0">
       <div class="row">
         <div class="header-text col-4">Ends in</div>

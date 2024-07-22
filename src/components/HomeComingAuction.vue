@@ -29,7 +29,7 @@ const { openAuction } = useAuctionStore();
         <div
           v-for="auction in comingAuctions"
           :key="auction.id"
-          class="col-12 col-sm-6 col-md-4"
+          class="col-12"
         >
           <AuctionCard
             :type="'coming-soon'"
