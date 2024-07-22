@@ -80,12 +80,19 @@ onUnmounted(() => {
 
 <template>
   <div class="card position-relative h-100 border-0" @click="showDetail(content)">
-    <div class="card-header border-0">
+    <div v-if="countdown.days + countdown.hours + countdown.minutes + countdown.seconds !== 0" class="card-header card-header-primary border-0">
       <div class="row">
         <div class="header-text col-4">Ends in</div>
         <div class="header-text col-8 text-end">
           {{ countdown.hours }}h {{ countdown.minutes }}m {{ countdown.seconds }}s
         </div>
+      </div>
+    </div>
+    <div v-else class="card-header card-header-danger border-0">
+      <div class="text-danger">
+        <p class="mb-0">
+          Auction closed
+        </p>
       </div>
     </div>
     <div class="card-body">
@@ -131,9 +138,13 @@ onUnmounted(() => {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06);
 }
 
-.card-header {
+.card-header-primary {
   background-color: var(--color-primary-100);
   color: var(--color-primary-800);
+}
+
+.card-header-danger {
+  background-color: #fef2f2;
 }
 
 .header-text {
