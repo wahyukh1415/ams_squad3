@@ -1,17 +1,11 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
+import Logo from './logo/Logo.vue';
 
 const props = defineProps({
   content: {
     type: Object,
-  }
+  },
 });
-
-const emit = defineEmits(["detailAuction"]);
-
-function showDetail(content) {
-  emit("detailAuction", content);
-}
 
 function formatPrice(value) {
   if (typeof value !== "number") {
@@ -24,104 +18,80 @@ function formatPrice(value) {
   });
 }
 
-// Define the target date for the countdown
-const targetDate = new Date(props.content.startedAt).getTime();
-
-// Create a reactive reference to store the countdown values
-const countdown = ref({
-  days: 0,
-  hours: 0,
-  minutes: 0,
-  seconds: 0
-});
-
-// Function to calculate and update the countdown
-const updateCountdown = () => {
-  const now = new Date().getTime();
-  const distance = targetDate - now;
-
-  if (distance < 0) {
-    countdown.value = { days: 0, hours: 0, minutes: 0, seconds: 0 };
-    clearInterval(interval);
-    return;
-  }
-
-  countdown.value = {
-    days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-    minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-    seconds: Math.floor((distance % (1000 * 60)) / 1000)
-  };
-};
-
 function auctionDuration(startDateString, endDateString) {
   // Parse the date strings into Date objects
   const startDate = new Date(startDateString);
   const endDate = new Date(endDateString);
-  
+
   // Calculate the difference in milliseconds
   const differenceInMilliseconds = endDate - startDate;
-  
+
   // Convert milliseconds to hours
   const millisecondsPerHour = 1000 * 60 * 60;
   const differenceInHours = differenceInMilliseconds / millisecondsPerHour;
-  
+
   return differenceInHours;
 }
 
-function ucwords (str) {
-    return (str.toLowerCase()).replace(/^([a-z])|\s+([a-z])/g, function (value) {
-        return value.toUpperCase();
-    });
+function formatDate(isoString) {
+  const date = new Date(isoString);
+  
+  // Format the date to get the day of the week, day of the month, month name, and year
+  const dateFormatter = new Intl.DateTimeFormat('en-GB', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+  
+  // Format the time to get the hour and minute
+  const timeFormatter = new Intl.DateTimeFormat('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+
+  const formattedDate = dateFormatter.format(date);
+  const formattedTime = timeFormatter.format(date);
+
+  return `${formattedDate} at ${formattedTime}`;
 }
 
-// Set up the interval to update the countdown every second
-let interval;
-onMounted(() => {
-  updateCountdown();
-  interval = setInterval(updateCountdown, 1000);
-});
-
-// Clear the interval when the component is unmounted
-onUnmounted(() => {
-  clearInterval(interval);
-});
+function ucwords(str) {
+  return str.toLowerCase().replace(/^([a-z])|\s+([a-z])/g, function (value) {
+    return value.toUpperCase();
+  });
+}
 </script>
 
 <template>
   <!-- Coming Soon -->
-  <div class="card h-100 border-0" @click="showDetail(content)">
-    <div class="card-header border-0">
-      <div class="row">
-        <div class="header-text col-4">Start in</div>
-        <div class="header-text col-8 text-end">
-          {{ countdown.days }}d {{ countdown.hours }}h {{ countdown.minutes }}m {{ countdown.seconds }}s
-        </div>
-      </div>
-    </div>
-    <div class="card-body">
-      <h5 class="card-title text-secondary">{{ ucwords(content.name) }}</h5>
+  <div class="card h-100 border-0">
+    <div class="card-body pb-0 text-center">
+      <Logo class="logo mb-3 text-primary-200"/>
+      <h5 class="card-title mb-1 text-secondary">
+        {{ ucwords(content.name) }}
+      </h5>
       <div class="card-text">
         <p class="mb-0">
           {{ content.description }}
         </p>
       </div>
     </div>
-    <div class="card-footer border-0 pt-0 bg-white text-secondary text-end">
+    <div class="card-footer border-0 pt-0 bg-white text-secondary text-center">
+      <hr class="dashed-hr my-3" />
       <div class="row">
-        <p class="mb-0 text-start text-sm-end col-6 col-sm-12">
-          Starting price :
-        </p>
-        <p class="card-price mb-0 text-end col-6 col-sm-12">
+        <p class="my-0 col-6 col-sm-12">Starting price :</p>
+        <p class="card-price col-6 col-sm-12">
           {{ formatPrice(content.minimumPrice) }}
         </p>
       </div>
-      <div class="row mt-2">
-        <p class="mb-0 text-start text-sm-end col-6 col-sm-12">
-          Auction duration :
+      <div class="row card-text">
+        <p class="mb-0 text-primary-600 fw-bold">
+          {{ formatDate(content.startedAt) }}
         </p>
-        <p class="card-price mb-0 text-end col-6 col-sm-12">
-          {{ auctionDuration(content.startedAt, content.endedAt) }} Hours
+        <p class="mb-0">
+          Auction duration : {{ Math.round(auctionDuration(content.startedAt, content.endedAt)) }} Hours
         </p>
       </div>
     </div>
@@ -134,21 +104,12 @@ onUnmounted(() => {
   transition: 0.3s transform cubic-bezier(0.155, 1.105, 0.295, 1.12),
     0.3s box-shadow,
     0.3s -webkit-transform cubic-bezier(0.155, 1.105, 0.295, 1.12);
-  cursor: pointer;
+  cursor: grab;
 }
 
-.card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06);
-}
-
-.card-header {
-  background-color: var(--color-primary-100);
-  color: var(--color-primary-800);
-}
-
-.header-text {
-  font-weight: 600;
+.logo {
+  width: 120px;
+  height: auto;
 }
 
 .card-text {
@@ -163,5 +124,9 @@ onUnmounted(() => {
 .card-price {
   font-weight: 700;
   color: var(--color-primary-800);
+}
+
+.dashed-hr {
+  border-top: 1.5px dashed rgba(0, 0, 0, 0.5);
 }
 </style>

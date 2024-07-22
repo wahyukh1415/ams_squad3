@@ -1,7 +1,6 @@
 <script setup>
 import { useAuctionStore } from "@/stores/auction";
 import { storeToRefs } from "pinia";
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import AuctionCard from "./AuctionCardActive.vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation, Autoplay } from 'swiper/modules';
@@ -50,10 +49,6 @@ const breakpoints = {
         :space-between="12"
         :breakpoints="breakpoints"
         :loop="true"
-        :autoplay="{
-          delay: 2000,
-          disableOnInteraction: false,
-        }"
         @swiper="onSwiper"
         @slideChange="onSlideChange">
         <SwiperSlide v-for="auction in activeAuctions" :key="auction.id">
