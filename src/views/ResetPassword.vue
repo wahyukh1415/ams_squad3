@@ -3,13 +3,17 @@ import { ref } from "vue";
 import axios from "axios";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
+const { authUser } = storeToRefs(useAuthStore());
+const { authCheck } = useAuthStore();
+let data = localStorage.getItem("auth-user");
+const dataUser = JSON.parse(data);
 
 const emailReset = ref("");
 const passReset = ref("");
 async function resetPass() {
   const newData = {
     email: emailReset.value,
-    pass: passReset.value,
+    newPassword: passReset.value,
   };
   const response = await axios.put(
     "http://localhost:8080/secured/user/reset-password",
@@ -20,9 +24,8 @@ async function resetPass() {
       },
     }
   );
-  console.log(newData);
+  console.log(response);
   // localStorage.setItem("auth-user", JSON.stringify(newData));
-  location.reload();
 }
 </script>
 
@@ -62,13 +65,10 @@ async function resetPass() {
               v-model="passReset"
             />
           </div>
-          <button
-            @click="resetPass"
-            class="btn btn-pass btn-primary fw-semibold"
-          >
-            Submit
-          </button>
         </form>
+        <button @click="resetPass" class="btn btn-pass btn-primary fw-semibold">
+          Submit
+        </button>
       </div>
     </div>
   </section>

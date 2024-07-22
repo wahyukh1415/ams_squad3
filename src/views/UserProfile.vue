@@ -2,7 +2,7 @@
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
 const { authUser } = storeToRefs(useAuthStore());
-import ProfileSettings from "./ProfileSettings.vue";
+import ProfileSettings from "../components/ProfileSettings.vue";
 </script>
 
 <template>
