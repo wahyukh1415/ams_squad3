@@ -2,6 +2,7 @@
 import axios from "axios";
 import { reactive, onMounted, onBeforeMount, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
+import { RouterLink } from "vue-router";
 import { useAuthStore } from "../stores/auth";
 
 const { authUser } = storeToRefs(useAuthStore());
@@ -103,10 +104,30 @@ const getRowNumber = (index) => {
           placeholder="Search"
         />
       </div>
-      <!-- <button class="btn btn-primary" title="Add User">
-        <i class="bi bi-person-plus-fill"></i>
-        <span class="register-button"> Register</span>
-      </button> -->
+      <div class="btn-group">
+        <button
+          type="button"
+          class="btn btn-primary dropdown-toggle"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          title="Add User"
+        >
+          <i class="bi bi-person-plus-fill"></i>
+          <span class="register-button"> Register</span>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <RouterLink class="dropdown-item" to="/register-seller"
+              >Register Seller</RouterLink
+            >
+          </li>
+          <li>
+            <RouterLink class="dropdown-item" to="/register-buyer"
+              >Register Buyer</RouterLink
+            >
+          </li>
+        </ul>
+      </div>
     </div>
     <table class="table table-bordered">
       <thead>
@@ -131,6 +152,13 @@ const getRowNumber = (index) => {
             </button>
           </td>
         </tr>
+        <tr class="row-height" v-for="i in itemsPerPage - filteredUsers.length" :key="i"> 
+          <!-- just adding blank row if data less than 10 -->
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+
         <tr v-if="filteredUsers.length == 0">
           <td colspan="3">Data not found..</td>
         </tr>
@@ -190,6 +218,9 @@ th {
 
 .pagination-wrapper button {
   margin: 0 10px;
+}
+.row-height {
+  height: 50px;
 }
 
 @media only screen and (min-width: 768px) {
