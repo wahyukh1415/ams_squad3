@@ -59,21 +59,6 @@ const updateCountdown = () => {
   };
 };
 
-function auctionDuration(startDateString, endDateString) {
-  // Parse the date strings into Date objects
-  const startDate = new Date(startDateString);
-  const endDate = new Date(endDateString);
-  
-  // Calculate the difference in milliseconds
-  const differenceInMilliseconds = endDate - startDate;
-  
-  // Convert milliseconds to hours
-  const millisecondsPerHour = 1000 * 60 * 60;
-  const differenceInHours = differenceInMilliseconds / millisecondsPerHour;
-  
-  return differenceInHours;
-}
-
 function ucwords (str) {
     return (str.toLowerCase()).replace(/^([a-z])|\s+([a-z])/g, function (value) {
         return value.toUpperCase();
@@ -94,7 +79,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="card d-inline-block h-100 border-0" @click="showDetail(content)">
+  <div class="card position-relative h-100 border-0" @click="showDetail(content)">
     <div class="card-header border-0">
       <div class="row">
         <div class="header-text col-4">Ends in</div>

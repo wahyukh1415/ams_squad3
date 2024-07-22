@@ -1,48 +1,31 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
 import { useAuctionStore } from "@/stores/auction";
 import { storeToRefs } from "pinia";
 import AuctionCard from "./AuctionCardActive.vue";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Navigation, Autoplay } from 'swiper/modules';
+import 'swiper/css'
+import 'swiper/css/navigation';
 
 const { activeAuctions } = storeToRefs(useAuctionStore());
 const { openAuction } = useAuctionStore();
-
-const sectionElement = ref(null);
-const pageWidth = ref(0);
-const scrollContainer = ref(null);
-
-const updatePageWidth = () => {
-  if (sectionElement.value && sectionElement.value.getBoundingClientRect) {
-    pageWidth.value = sectionElement.value.getBoundingClientRect().width;
-  }
+const onSwiper = (swiper) => {
+  // console.log(swiper);
 };
-
-const scrollLeft = () => {
-  if (scrollContainer.value) {
-    scrollContainer.value.scrollBy({
-      left: -pageWidth.value,
-      behavior: "smooth",
-    }); // Adjust 'left' value as needed
-  }
+const onSlideChange = () => {
+  // console.log('slide change');
 };
-
-const scrollRight = () => {
-  if (scrollContainer.value) {
-    scrollContainer.value.scrollBy({
-      left: pageWidth.value,
-      behavior: "smooth",
-    }); // Adjust 'left' value as needed
-  }
-};
-
-onMounted(() => {
-  updatePageWidth();
-  window.addEventListener("resize", updatePageWidth);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("resize", updatePageWidth);
-});
+const modules = [Navigation, Autoplay]
+const breakpoints = {
+  '768': {
+    slidesPerView: 2,
+    spaceBetween: 20,
+  },
+  '992': {
+    slidesPerView: 3,
+    spaceBetween: 40,
+  },
+}
 </script>
 
 <template>
@@ -59,44 +42,28 @@ onUnmounted(() => {
           to your next great treasure. Act fast and win big!
         </p>
       </div>
-    </div>
-    <div class="position-relative">
-      <div class="scroll-button left-button">
-        <button class="btn btn-lg btn-primary" @click="scrollLeft">
-          <i class="bi bi-chevron-left"></i>
-        </button>
-      </div>
-      <div class="x-scrolling-wrapper" ref="scrollContainer">
-        <div class="row position-relative">
-          <div class="col-12">
-            <div
-              class="row flex-row flex-nowrap mt-4 pb-4 pt-2"
-              ref="sectionElement"
-            >
-              <div
-                class="component col-12 col-sm-6 col-md-4"
-                v-for="auction in activeAuctions"
-                :key="auction.id"
-              >
-                <AuctionCard
-                  :content="auction"
-                  @detail-auction="openAuction"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="scroll-button right-button">
-        <button class="btn btn-lg btn-primary" @click="scrollRight">
-          <i class="bi bi-chevron-right"></i>
-        </button>
-      </div>
+      <Swiper
+        :modules="modules"
+        :navigation="true"
+        :slidesPerView="1"
+        :space-between="12"
+        :breakpoints="breakpoints"
+        :loop="true"
+        @swiper="onSwiper"
+        @slideChange="onSlideChange">
+        <SwiperSlide v-for="auction in activeAuctions" :key="auction.id">
+          <AuctionCard :content="auction" @detail-auction="openAuction"/>
+        </SwiperSlide>
+      </Swiper>
     </div>
   </section>
 </template>
 
 <style scoped>
+#active-auction {
+  overflow-x: hidden;
+}
+
 #active-auction::before {
   content: " ";
   display: block;
@@ -112,27 +79,16 @@ onUnmounted(() => {
   background-size: cover;
 }
 
-.x-scrolling-wrapper {
-  overflow-x: hidden;
+.swiper {
+  overflow: visible;
 }
 
-.scroll-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
+.swiper-button-prev, .swiper-button-next {
+  color: var(--color-primary-600) !important;
 }
 
-.scroll-button .btn {
-  padding: 20px;
-}
-
-.left-button {
-  left: 20px;
-}
-
-.right-button {
-  right: 20px;
+.swiper-slide {
+  height: auto;
 }
 
 .section-title {
@@ -151,25 +107,7 @@ onUnmounted(() => {
 
 .heading {
   margin: 0 50px;
-}
-
-.component:first-child {
-  margin-left: 12px;
-}
-
-.component:last-child {
-  margin-right: 12px;
-}
-
-@media (min-width: 576px) {
-  .component:first-child {
-    margin-left: 50px;
-  }
-  
-  .component:last-child {
-    margin-right: 50px;
-  }
-}
+} 
 
 @media (min-width: 992px) {
   .heading {
