@@ -1,4 +1,15 @@
 <script setup>
+import { ref } from "vue";
+
+const openPrivacyPolicyModal = ref(false);
+
+const showModal = () => {
+    openPrivacyPolicyModal.value = true;
+};
+
+const closeModal = () => {
+    openPrivacyPolicyModal.value = false;
+};
 </script>
 <template>
     <div class="rules-container">
@@ -68,13 +79,46 @@
                 <h5>8. Privacy Policy</h5>
                 <p>
                     All users must adhere to BidBuddy's
-                    <span>PRIVACY POLICY</span>, which protects user data and
-                    ensures a secure transaction environment. Personal
-                    information will not be shared without user consent.
+                    <span @click="showModal">PRIVACY POLICY</span>, which
+                    protects user data and ensures a secure transaction
+                    environment. Personal information will not be shared without
+                    user consent.
                 </p>
             </div>
         </div>
     </div>
+    <teleport to="body">
+        <div v-if="openPrivacyPolicyModal" class="modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Privacy Policy</h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            @click="closeModal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Modal body text goes here.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            @click="closeModal"
+                            type="button"
+                            class="btn btn-secondary"
+                        >
+                            Close
+                        </button>
+                        <button type="button" class="btn btn-primary">
+                            Save changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </teleport>
 </template>
 
 <style scoped>
