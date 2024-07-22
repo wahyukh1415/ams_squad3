@@ -17,7 +17,7 @@ const modules = [Autoplay, EffectCards]
   <section id="coming-auction" class="py-5 bg-primary-600">
     <div class="container">
       <div class="row">
-        <div class="col-6 text-start text-white mb-4 d-flex align-items-center">
+        <div class="col-12 col-md-6 text-start text-white d-flex align-items-center">
           <div>
             <h1 class="section-title text-white my-0 pe-5">
               Upcoming Auctions and New Bidding Opportunities
@@ -34,8 +34,8 @@ const modules = [Autoplay, EffectCards]
             </div>
           </div>
         </div>
-        <div class="row col-6">
-          <div class="px-5">
+        <div class="col-12 col-md-6">
+          <div class="px-md-5">
             <Swiper
               :modules="modules"
               :effect="'cards'"
@@ -59,6 +59,10 @@ const modules = [Autoplay, EffectCards]
 </template>
 
 <style scoped>
+#coming-auction {
+  overflow: hidden;
+}
+
 .section-title {
   font-weight: 700;
   letter-spacing: 0.2px;
