@@ -44,6 +44,7 @@ onMounted(() => {
     <HomeActiveAuction />
     <HomeComingAuction />
     <AuctionRules />
+    <FAQ />
     <CreateAuctionButton />
     <Footer />
 </template>
