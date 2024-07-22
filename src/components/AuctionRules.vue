@@ -1,5 +1,4 @@
 <script setup>
-import PrivacyPolicyModal from "./PrivacyPolicyModal.vue";
 </script>
 <template>
     <div class="rules-container">
@@ -69,16 +68,13 @@ import PrivacyPolicyModal from "./PrivacyPolicyModal.vue";
                 <h5>8. Privacy Policy</h5>
                 <p>
                     All users must adhere to BidBuddy's
-                    <span @click="openModal = true">PRIVACY POLICY</span>, which
-                    protects user data and ensures a secure transaction
-                    environment. Personal information will not be shared without
-                    user consent.
+                    <span>PRIVACY POLICY</span>, which protects user data and
+                    ensures a secure transaction environment. Personal
+                    information will not be shared without user consent.
                 </p>
             </div>
         </div>
     </div>
-
-    <PrivacyPolicyModal />
 </template>
 
 <style scoped>
@@ -95,6 +91,7 @@ import PrivacyPolicyModal from "./PrivacyPolicyModal.vue";
 }
 h1 {
     text-align: center;
+    font-weight: 700;
 }
 
 .rules-item {
