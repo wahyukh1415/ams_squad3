@@ -83,7 +83,8 @@ const breakpoints = {
   overflow: visible;
 }
 
-.swiper-button-prev, .swiper-button-next {
+.swiper-button-prev,
+.swiper-button-next {
   color: var(--color-primary-600) !important;
 }
 
@@ -107,7 +108,7 @@ const breakpoints = {
 
 .heading {
   margin: 0 50px;
-} 
+}
 
 @media (min-width: 992px) {
   .heading {

@@ -38,7 +38,7 @@ onMounted(() => {
   </section>
     <HomeActiveAuction />
     <HomeComingAuction />
-    <CreateAuctionButton />
+    <CreateAuctionButton v-if="authUser.role == 'SELLER'" />
     <Footer />
 </template>
 
