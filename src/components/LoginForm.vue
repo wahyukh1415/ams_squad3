@@ -2,9 +2,12 @@
 import { watch, ref, reactive, computed } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();
 const loading = ref(false);
+const { getUser } = useAuthStore();
 const errors = reactive({
   email: "",
   password: "",
@@ -75,20 +78,6 @@ async function authenticate() {
   });
 
   loading.value = false;
-}
-
-async function getUser(token) {
-  await axios({
-    method: "get",
-    url: "http://127.0.0.1:8080/secured/user/current",
-    headers: {
-      Authorization: token,
-    },
-  }).then(function (response) {
-    const user = response.data.data;
-    user["token"] = token;
-    localStorage.setItem("auth-user", JSON.stringify(user));
-  });
 }
 </script>
 

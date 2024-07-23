@@ -2,10 +2,12 @@ import { defineStore, storeToRefs } from 'pinia';
 import axios from 'axios';
 import { useAuthStore } from './auth';
 import { reactive, onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router';
 
 export const useAuctionStore = defineStore('auction', () => {
 	const { authUser } = storeToRefs(useAuthStore());
 	const { authCheck } = useAuthStore();
+	const router = useRouter()
 	const auctions = reactive([]);
 
 	onMounted(() => {
@@ -54,7 +56,7 @@ export const useAuctionStore = defineStore('auction', () => {
 	}
 
 	function openAuction(auction) {
-		alert(auction.name);
+		router.push({ name: 'detail-auction', query: { id: auction.id } });
 	}
 
     return { activeAuctions, comingAuctions, endedAuctions, openAuction }

@@ -2,17 +2,21 @@
 import axios from "axios";
 import { reactive, onMounted, onBeforeMount, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
+import { RouterLink } from "vue-router";
 import { useAuthStore } from "../stores/auth";
 
 const { authUser } = storeToRefs(useAuthStore());
 const { authCheck } = useAuthStore();
 
 const baseUrl = "http://localhost:8080/secured/user";
-// const token = localStorage.getItem('token');
 
 const listUser = reactive([]);
 const keyword = ref("");
 const filteredUsers = ref([]);
+
+const currentPage = ref(1);
+const itemsPerPage = 10;
+const hasMoreData = ref(true);
 
 const searchUsers = () => {
   if (!keyword.value) {
@@ -26,15 +30,21 @@ const searchUsers = () => {
 
 watch(keyword, searchUsers);
 
-const getListUser = async () => {
-  const res = await axios.get(`${baseUrl}/list?page=1&size=100`, {
-    headers: {
-      Authorization: authUser.value.token,
-    },
-  });
+const getListUser = async (page = 1) => {
+  const res = await axios.get(
+    `${baseUrl}/list?page=${page}&size=${itemsPerPage}`,
+    {
+      headers: {
+        Authorization: authUser.value.token,
+      },
+    }
+  );
 
   listUser.push(...res.data.data);
   filteredUsers.value = listUser;
+
+  currentPage.value = page;
+  hasMoreData.value = res.data.data.length === itemsPerPage; // If less than itemsPerPage, assume no more data
 };
 
 const deleteUser = (name) => {
@@ -62,6 +72,24 @@ onBeforeMount(() => {
   authCheck();
   getListUser();
 });
+
+const nextPage = () => {
+  if (hasMoreData.value) {
+    listUser.length = 0;
+    getListUser(currentPage.value + 1);
+  }
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    listUser.length = 0;
+    getListUser(currentPage.value - 1);
+  }
+};
+
+const getRowNumber = (index) => {
+  return (currentPage.value - 1) * itemsPerPage + index + 1; //keeps the numbers in the next table in sequence
+};
 </script>
 
 <template>
@@ -76,10 +104,30 @@ onBeforeMount(() => {
           placeholder="Search"
         />
       </div>
-      <button class="btn btn-primary" title="Add User">
-        <i class="bi bi-person-plus-fill"></i>
-        <span class="register-button"> Register</span>
-      </button>
+      <div class="btn-group">
+        <button
+          type="button"
+          class="btn btn-primary dropdown-toggle"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          title="Add User"
+        >
+          <i class="bi bi-person-plus-fill"></i>
+          <span class="register-button"> Register</span>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <RouterLink class="dropdown-item" to="/register-seller"
+              >Register Seller</RouterLink
+            >
+          </li>
+          <li>
+            <RouterLink class="dropdown-item" to="/register-buyer"
+              >Register Buyer</RouterLink
+            >
+          </li>
+        </ul>
+      </div>
     </div>
     <table class="table table-bordered">
       <thead>
@@ -91,12 +139,12 @@ onBeforeMount(() => {
       </thead>
       <tbody>
         <tr v-for="(data, index) in filteredUsers" :key="index">
-          <td>{{ index + 1 }}</td>
+          <td>{{ getRowNumber(index) }}</td>
           <td>{{ data.name }}</td>
           <td>
             <button
               class="btn btn-danger"
-              v-bind:disabled="data.name === 'Admin'"
+              :disabled="data.name === 'Admin'"
               @click="deleteUser(data.name)"
               title="Delete User"
             >
@@ -104,11 +152,35 @@ onBeforeMount(() => {
             </button>
           </td>
         </tr>
+        <tr class="row-height" v-for="i in itemsPerPage - filteredUsers.length" :key="i"> 
+          <!-- just adding blank row if data less than 10 -->
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+
         <tr v-if="filteredUsers.length == 0">
           <td colspan="3">Data not found..</td>
         </tr>
       </tbody>
     </table>
+    <div class="pagination-wrapper">
+      <button
+        class="btn btn-secondary"
+        :disabled="currentPage === 1"
+        @click="prevPage"
+      >
+        Previous
+      </button>
+      <span>Page {{ currentPage }}</span>
+      <button
+        class="btn btn-secondary"
+        :disabled="!hasMoreData"
+        @click="nextPage"
+      >
+        Next
+      </button>
+    </div>
   </div>
 </template>
 
@@ -135,6 +207,20 @@ th {
 
 .table {
   text-align: center;
+}
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px;
+}
+
+.pagination-wrapper button {
+  margin: 0 10px;
+}
+.row-height {
+  height: 50px;
 }
 
 @media only screen and (min-width: 768px) {

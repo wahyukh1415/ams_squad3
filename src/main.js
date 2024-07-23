@@ -18,6 +18,7 @@ import '@fontsource/nunito-sans/900-italic.css';
 import './assets/main.css'
 import './assets/main.scss'
 import 'bootstrap-icons/font/bootstrap-icons.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
