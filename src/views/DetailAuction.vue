@@ -1,12 +1,195 @@
-<script>
+<script setup>
+import Footer from '@/components/Footer.vue';
+import axios from 'axios';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
+import { usePriceStore } from '@/stores/price';
+
+const { authUser } = storeToRefs(useAuthStore())
+const { authCheck } = useAuthStore()
+const router = useRouter()
+const auction = ref([])
+const { formatPrice } = usePriceStore()
+
+// Define the target date for the countdown
+const targetDate = ref('');
+
+// Create a reactive reference to store the countdown values
+const countdown = ref({
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0
+});
+
+// Function to calculate and update the countdown
+const updateCountdown = () => {
+  const now = new Date().getTime();
+  const distance = targetDate.value - now;
+
+  if (distance < 0) {
+    countdown.value = { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    clearInterval(interval);
+    return;
+  }
+
+  countdown.value = {
+    days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+    minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+    seconds: Math.floor((distance % (1000 * 60)) / 1000)
+  };
+};
+
+const startedAuctionDate = computed(() => {
+    return auction.value.startedAt ? formatDate(auction.value.startedAt) : '';
+});
+
+function formatDate(isoString) {
+  const date = new Date(isoString);
+  
+  // Format the date to get the day of the week, day of the month, month name, and year
+  const dateFormatter = new Intl.DateTimeFormat('en-GB', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+  
+  // Format the time to get the hour and minute
+  const timeFormatter = new Intl.DateTimeFormat('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+
+  const formattedDate = dateFormatter.format(date);
+  const formattedTime = timeFormatter.format(date);
+
+  return `${formattedDate} at ${formattedTime}`;
+}
+
+function auctionDuration(startDateString, endDateString) {
+  // Parse the date strings into Date objects
+  const startDate = new Date(startDateString);
+  const endDate = new Date(endDateString);
+
+  // Calculate the difference in milliseconds
+  const differenceInMilliseconds = endDate - startDate;
+
+  // Convert milliseconds to hours
+  const millisecondsPerHour = 1000 * 60 * 60;
+  const differenceInHours = differenceInMilliseconds / millisecondsPerHour;
+
+  return differenceInHours;
+}
+
+// Set up the interval to update the countdown every second
+let interval;
+onMounted(() => {
+    authCheck()
+    getAuction()
+    updateCountdown();
+    interval = setInterval(updateCountdown, 1000);
+})
+
+onUnmounted(() => {
+  clearInterval(interval);
+});
+
+async function getAuction() {
+    await axios({
+        method: 'get',
+        url: `http://127.0.0.1:8080/secured/auction/list/${router.currentRoute.value.query.id}`,
+        headers: {
+            Authorization: authUser.value.token,
+        },
+    }).then(function (response) {
+        auction.value = response.data.data.auction;
+        targetDate.value = new Date(auction.value.endedAt).getTime()
+    })
+}
 </script>
 <template>
-    <div class="container">
-        <h1>
-            Product Name
-        </h1>
-        <p>
-            Product description - Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero deserunt quaerat repudiandae possimus cupiditate quibusdam ut nisi nesciunt alias voluptas assumenda dolorem explicabo accusamus, iste iure rem quo expedita. Cumque.
-        </p>
-    </div>
+    <section id="detail-auction" class="bg-primary-50">
+        <div class="container py-5">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb mb-2">
+                    <router-link to="/" class="breadcrumb-item">Home</router-link>
+                    <a class="breadcrumb-item active" aria-current="page">Details</a>
+                </ol>
+            </nav>
+            <h1 class="fw-bold text-primary-950">
+                {{ auction.name }}
+            </h1>
+            <div class="my-3">
+                <span v-if="countdown.days + countdown.hours + countdown.minutes + countdown.seconds !== 0" class="countdown px-2 py-1 border text-danger border-danger-subtle rounded-3">
+                    Ends in : {{ countdown.hours }}h {{ countdown.minutes }}m {{ countdown.seconds }}s
+                </span>
+                <span v-else class="countdown px-2 py-1 border text-danger border-danger-subtle rounded-3">
+                    Auction closed
+                </span>
+            </div>
+            <div class="row">
+                <div class="col-sm-8 col-md-9 mb-4 mb-sm-0">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-heading text-primary-600">Overview</h5>
+                            <p>
+                                {{ auction.description }}
+                            </p>
+                            <h5 class="card-heading text-primary-600">Starting price</h5>
+                            <p>{{ formatPrice(auction.minimumPrice) }}</p>
+                            <h5 class="card-heading text-primary-600">Auction time</h5>
+                            <p>{{ startedAuctionDate }} ({{ Math.round(auctionDuration(auction.startedAt, auction.endedAt)) }} Hours)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-3">
+                    <div v-if="auction.highestBidderName">
+                        <p class="mb-0">Highest bid</p>
+                        <p class="highest-bid mb-0 text-primary-600">{{ formatPrice(auction.highestBid) }}</p>
+                        <p class="highest-bidder">By : {{ auction.highestBidderName }}</p>
+                    </div>
+                    <button class="btn btn-primary w-100">Create bid</button>
+                </div>
+            </div>
+        </div>
+        <Footer />
+    </section>
 </template>
+
+<style scoped>
+#detail-auction {
+    min-height: 100dvh;
+}
+
+.breadcrumb-item {
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.breadcrumb-item.active {
+    cursor: default;
+}
+
+.card-heading {
+    font-size: large;
+    font-weight: 600;
+}
+
+.countdown {
+    background-color: #fef2f2;
+}
+
+.highest-bid {
+    font-size: x-large;
+    font-weight: 700;
+}
+
+.highest-bidder {
+    font-size: small;
+}
+</style>

@@ -56,7 +56,7 @@ export const useAuctionStore = defineStore('auction', () => {
 	}
 
 	function openAuction(auction) {
-		router.push({ name: 'detail-auction' });
+		router.push({ name: 'detail-auction', query: { id: auction.id } });
 	}
 
     return { activeAuctions, comingAuctions, endedAuctions, openAuction }

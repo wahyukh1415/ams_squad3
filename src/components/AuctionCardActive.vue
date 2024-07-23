@@ -1,5 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { usePriceStore } from "@/stores/price";
 
 const props = defineProps({
   content: {
@@ -14,19 +16,10 @@ const props = defineProps({
 
 const emit = defineEmits(["detailAuction"]);
 
+const { formatPrice } = usePriceStore()
+
 function showDetail(content) {
   emit("detailAuction", content);
-}
-
-function formatPrice(value) {
-  if (typeof value !== "number") {
-    return value;
-  }
-  return value.toLocaleString("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-  });
 }
 
 // Define the target date for the countdown

@@ -1,5 +1,6 @@
 <script setup>
 import Logo from './logo/Logo.vue';
+import { usePriceStore } from '@/stores/price';
 
 const props = defineProps({
   content: {
@@ -7,16 +8,7 @@ const props = defineProps({
   },
 });
 
-function formatPrice(value) {
-  if (typeof value !== "number") {
-    return value;
-  }
-  return value.toLocaleString("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-  });
-}
+const { formatPrice } = usePriceStore()
 
 function auctionDuration(startDateString, endDateString) {
   // Parse the date strings into Date objects
