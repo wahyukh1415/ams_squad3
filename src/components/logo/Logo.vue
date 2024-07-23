@@ -122,3 +122,10 @@
     </g>
   </svg>
 </template>
+
+<style>
+svg {
+  color: #5277a5;
+  width: 200px;
+}
+</style>

@@ -1,10 +1,7 @@
 <script setup>
+import Navbar from "../components/Navbar.vue";
 import { ref } from "vue";
 import axios from "axios";
-import { storeToRefs } from "pinia";
-import { useAuthStore } from "@/stores/auth";
-const { authUser } = storeToRefs(useAuthStore());
-const { authCheck } = useAuthStore();
 let data = localStorage.getItem("auth-user");
 const dataUser = JSON.parse(data);
 
@@ -25,53 +22,60 @@ async function resetPass() {
     }
   );
   console.log(response);
-  // localStorage.setItem("auth-user", JSON.stringify(newData));
 }
 </script>
 
 <template>
-  <section class="container">
-    <div class="wrapper-password">
-      <h1 class="fs-3 mb-5 title text-center position-relative overflow-hidden">
-        <span class="d-inline-block position-relative">Reset Password</span>
-      </h1>
-      <div class="form-password">
-        <h4 class="fs-6">
-          Please enter your email address and password to change the password
-          for your account.
-        </h4>
-        <form action="" class="row mt-4 gap-3">
-          <div class="form-group row align-items-center">
-            <label class="col-3" for="email">Email</label>
+  <div>
+    <Navbar />
+    <section class="container">
+      <div class="wrapper-password">
+        <h1
+          class="fs-3 mb-5 title text-center position-relative overflow-hidden"
+        >
+          <span class="d-inline-block position-relative">Reset Password</span>
+        </h1>
+        <div class="form-password">
+          <h4 class="fs-6">
+            Please enter your email address and password to change the password
+            for your account.
+          </h4>
+          <form action="" class="row mt-4 gap-3">
+            <div class="form-group row align-items-center">
+              <label class="col-3" for="email">Email</label>
 
-            <input
-              autocomplete="email"
-              type="email"
-              class="d-inline col-9"
-              placeholder="Email"
-              name="email"
-              id="email"
-              v-model="emailReset"
-            />
-          </div>
-          <div class="form-group row align-items-center">
-            <label class="col-3" for="password">New Password</label>
-            <input
-              type="password"
-              class="col-9 tes"
-              placeholder="Password"
-              name="password"
-              id="password"
-              v-model="passReset"
-            />
-          </div>
-        </form>
-        <button @click="resetPass" class="btn btn-pass btn-primary fw-semibold">
-          Submit
-        </button>
+              <input
+                autocomplete="email"
+                type="email"
+                class="d-inline col-9"
+                placeholder="Email"
+                name="email"
+                id="email"
+                v-model="emailReset"
+              />
+            </div>
+            <div class="form-group row align-items-center">
+              <label class="col-3" for="password">New Password</label>
+              <input
+                type="password"
+                class="col-9 tes"
+                placeholder="Password"
+                name="password"
+                id="password"
+                v-model="passReset"
+              />
+            </div>
+          </form>
+          <button
+            @click="resetPass"
+            class="btn btn-pass btn-primary fw-semibold"
+          >
+            Submit
+          </button>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </template>
 
 <style scoped>
