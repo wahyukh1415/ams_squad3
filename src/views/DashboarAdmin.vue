@@ -18,6 +18,7 @@ onMounted(() => {
 
 <template>
   <div>
+    <Navbar />
     <main class="container">
       <h1>Dashboar Admin</h1>
       <h4>List User</h4>
