@@ -155,6 +155,11 @@ const getRowNumber = (index) => {
             </button>
           </td>
         </tr>
+        <tr v-if="filteredUsers.length == 0">
+          <td></td>
+          <td>Data not found..</td>
+          <td></td>
+        </tr>
         <tr
           class="row-height"
           v-for="i in itemsPerPage - filteredUsers.length"
@@ -164,10 +169,6 @@ const getRowNumber = (index) => {
           <td></td>
           <td></td>
           <td></td>
-        </tr>
-
-        <tr v-if="filteredUsers.length == 0">
-          <td colspan="3">Data not found..</td>
         </tr>
       </tbody>
     </table>
