@@ -7,7 +7,6 @@ import Logo from "./logo/Logo.vue";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 
-const { authUser } = storeToRefs(useAuthStore());
 const { authCheck, logout } = useAuthStore();
 
 const data = localStorage.getItem("auth-user");
@@ -15,7 +14,6 @@ const user = JSON.parse(data);
 console.log(user.role);
 
 const toogleProfile = ref(false);
-console.log(authUser.role);
 
 onMounted(() => {
   authCheck();
@@ -23,7 +21,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <nav class="navbar py-3 border-2 border-bottom mb-2">
+  <nav class="navbar py-3 border-2 border-bottom">
     <div class="container">
       <div class="row navbar-collapse" id="navbarTogglerDemo01">
         <div class="col">
@@ -67,7 +65,10 @@ onMounted(() => {
                 <i class="bi bi-caret-down-fill"></i>
               </div>
 
-              <ul class="profile-menu position-absolute" v-if="toogleProfile">
+              <ul
+                class="profile-menu position-absolute z-3"
+                v-if="toogleProfile"
+              >
                 <RouterLink to="/user-profile" class="list-drp">
                   <span class="icon-drp"><i class="bi bi-person"></i></span>
                   <a
@@ -117,6 +118,21 @@ onMounted(() => {
                     href="#scrollspyHeading4"
                   >
                     Register Seller</a
+                  >
+                </RouterLink>
+                <RouterLink
+                  v-if="user.role === 'ADMIN'"
+                  class="list-drp"
+                  to="/reset-password"
+                >
+                  <span class="icon-drp"
+                    ><i class="bi bi-person-lock"></i
+                  ></span>
+                  <a
+                    class="dropdown-item fw-semibold"
+                    href="#scrollspyHeading4"
+                  >
+                    Reset Password</a
                   >
                 </RouterLink>
                 <li class="list-drp" @click="logout">
