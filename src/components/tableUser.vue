@@ -17,6 +17,7 @@ const filteredUsers = ref([]);
 const currentPage = ref(1);
 const itemsPerPage = 10;
 const hasMoreData = ref(true);
+const showDropdown = ref(false);
 
 const searchUsers = () => {
   if (!keyword.value) {
@@ -104,25 +105,27 @@ const getRowNumber = (index) => {
           placeholder="Search"
         />
       </div>
-      <div class="btn-group">
+      <div id="btn-dropdown">
         <button
           type="button"
           class="btn btn-primary dropdown-toggle"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
+          @click="showDropdown = !showDropdown"
           title="Add User"
         >
           <i class="bi bi-person-plus-fill"></i>
-          <span class="register-button"> Register</span>
+          <span class="register-btn-text"> Register</span>
         </button>
-        <ul class="dropdown-menu">
+        <ul
+          class="list-group list-unstyled position-absolute z-1 mt-1 bg-white"
+          v-if="showDropdown"
+        >
           <li>
-            <RouterLink class="dropdown-item" to="/register-seller"
+            <RouterLink class="list-group-item" to="/register-seller"
               >Register Seller</RouterLink
             >
           </li>
           <li>
-            <RouterLink class="dropdown-item" to="/register-buyer"
+            <RouterLink class="list-group-item" to="/register-buyer"
               >Register Buyer</RouterLink
             >
           </li>
@@ -152,7 +155,11 @@ const getRowNumber = (index) => {
             </button>
           </td>
         </tr>
-        <tr class="row-height" v-for="i in itemsPerPage - filteredUsers.length" :key="i"> 
+        <tr
+          class="row-height"
+          v-for="i in itemsPerPage - filteredUsers.length"
+          :key="i"
+        >
           <!-- just adding blank row if data less than 10 -->
           <td></td>
           <td></td>
@@ -189,7 +196,7 @@ const getRowNumber = (index) => {
   width: 50%;
 }
 
-.register-button {
+.register-btn-text {
   display: none;
 }
 
@@ -219,6 +226,12 @@ th {
 .pagination-wrapper button {
   margin: 0 10px;
 }
+
+.list-group-item:hover {
+  background-color: #a3b5e9;
+  cursor: pointer;
+}
+
 .row-height {
   height: 50px;
 }
@@ -228,7 +241,7 @@ th {
     width: 30%;
   }
 
-  .register-button {
+  .register-btn-text {
     display: inline;
   }
 }

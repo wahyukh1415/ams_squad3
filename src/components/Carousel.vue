@@ -2,14 +2,18 @@
 import { reactive } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
-import image1 from '../assets/images/carousel/1.png';
-import image2 from '../assets/images/carousel/2.png';
+import image1 from '../assets/images/carousel/4.png';
+import image2 from '../assets/images/carousel/5.png';
 import image3 from '../assets/images/carousel/3.png';
+import image4 from '../assets/images/carousel/2.png';
+import image5 from '../assets/images/carousel/1.png';
 
 const slides = [
   { image: image1 },
   { image: image2 },
   { image: image3 },
+  { image: image4 },
+  { image: image5 },
 ];
 </script>
 
