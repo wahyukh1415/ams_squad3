@@ -110,7 +110,7 @@ async function updateProfile() {
                   </div>
                 </form>
                 <div class="resetPass text-end">
-                  <RouterLink to="reset-password">Reset Password</RouterLink>
+                  <RouterLink to="/reset-password">Reset Password</RouterLink>
                   <p class="fw-bolder" @click="toggleReset">Reset password?</p>
                 </div>
               </div>
