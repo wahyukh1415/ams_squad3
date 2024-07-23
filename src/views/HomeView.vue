@@ -3,13 +3,17 @@ import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
 
-import HomeActiveAuction from '@/components/HomeActiveAuction.vue';
-import HomeComingAuction from '@/components/HomeComingAuction.vue';
-import Footer from '@/components/Footer.vue';
-import Navbar from '@/components/Navbar.vue';
-import CreateAuctionButton from '@/components/CreateAuctionButton.vue';
+import HomeActiveAuction from "@/components/HomeActiveAuction.vue";
+import HomeComingAuction from "@/components/HomeComingAuction.vue";
+import Footer from "@/components/Footer.vue";
+import Navbar from "@/components/Navbar.vue";
+import CreateAuctionButton from "@/components/CreateAuctionButton.vue";
+import FAQ from "@/components/FaqTemp.vue";
+import AuctionRules from "@/components/AuctionRules.vue";
+import Carousel from "@/components/Carousel.vue";
 
-import { RouterLink } from 'vue-router';
+import { RouterLink } from "vue-router";
+import AuctionRulesVue from "@/components/AuctionRules.vue";
 
 const { authUser } = storeToRefs(useAuthStore());
 const { authCheck, logout } = useAuthStore();
@@ -21,6 +25,7 @@ onMounted(() => {
 
 <template>
   <Navbar />
+  <Carousel />
   <section id="hero" class="container">
     <div class="row px-4 px-md-0">
       <h1 class="heading col-12 col-md-6">Bids Beyond Boundaries</h1>
@@ -36,10 +41,12 @@ onMounted(() => {
       </div>
     </div>
   </section>
-    <HomeActiveAuction />
-    <HomeComingAuction />
-    <CreateAuctionButton v-if="authUser.role == 'SELLER'" />
-    <Footer />
+  <HomeActiveAuction />
+  <HomeComingAuction />
+  <AuctionRules />
+  <FAQ />
+  <CreateAuctionButton v-if="authUser.role == 'SELLER'" />
+  <Footer />
 </template>
 
 <style scoped>
