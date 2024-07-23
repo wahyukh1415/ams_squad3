@@ -109,10 +109,6 @@ async function updateProfile() {
                     />
                   </div>
                 </form>
-                <div class="resetPass text-end">
-                  <RouterLink to="/reset-password">Reset Password</RouterLink>
-                  <p class="fw-bolder" @click="toggleReset">Reset password?</p>
-                </div>
               </div>
               <div
                 class="footerModal d-flex gap-3 px-3 pb-3 justify-content-between"
