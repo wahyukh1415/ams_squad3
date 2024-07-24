@@ -1,14 +1,19 @@
 <script setup>
+import PrivacyPolicy from "./PrivacyPolicy.vue";
 import { ref } from "vue";
+import { onMounted } from "vue";
+let myModal;
 
-const openPrivacyPolicyModal = ref(false);
+onMounted(() => {
+    myModal = new bootstrap.Modal(document.getElementById("alertPopup"));
+});
 
-const showModal = () => {
-    openPrivacyPolicyModal.value = true;
+const openModal = () => {
+    myModal.show();
 };
 
 const closeModal = () => {
-    openPrivacyPolicyModal.value = false;
+    myModal.hide();
 };
 </script>
 <template>
@@ -79,46 +84,15 @@ const closeModal = () => {
                 <h5>8. Privacy Policy</h5>
                 <p>
                     All users must adhere to BidBuddy's
-                    <span @click="showModal">PRIVACY POLICY</span>, which
-                    protects user data and ensures a secure transaction
+                    <span type="button" @click="openModal">PRIVACY POLICY</span
+                    >, which protects user data and ensures a secure transaction
                     environment. Personal information will not be shared without
                     user consent.
                 </p>
             </div>
         </div>
     </div>
-    <teleport to="body">
-        <div v-if="openPrivacyPolicyModal" class="modal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Privacy Policy</h5>
-                        <button
-                            type="button"
-                            class="btn-close"
-                            @click="closeModal"
-                            aria-label="Close"
-                        ></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Modal body text goes here.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            @click="closeModal"
-                            type="button"
-                            class="btn btn-secondary"
-                        >
-                            Close
-                        </button>
-                        <button type="button" class="btn btn-primary">
-                            Save changes
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </teleport>
+    <PrivacyPolicy />
 </template>
 
 <style scoped>
