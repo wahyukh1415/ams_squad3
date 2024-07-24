@@ -9,12 +9,6 @@ import 'swiper/css/navigation';
 
 const { activeAuctions } = storeToRefs(useAuctionStore());
 const { openAuction } = useAuctionStore();
-const onSwiper = (swiper) => {
-  // console.log(swiper);
-};
-const onSlideChange = () => {
-  // console.log('slide change');
-};
 const modules = [Navigation, Autoplay]
 const breakpoints = {
   '768': {
@@ -77,6 +71,7 @@ const breakpoints = {
   background-repeat: no-repeat;
   background-position: 50% calc(-130px - 1.5vw);
   background-size: cover;
+  pointer-events: none;
 }
 
 .swiper {
