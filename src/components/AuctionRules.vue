@@ -16,16 +16,16 @@ let myModal;
 //     myModal.hide();
 // };
 </script>
-<template>
+<!-- <template> -->
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Launch demo modal
-    </button>
+    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal -->
+    <!-- </button> -->
     <!-- data-bs-toggle nya 'modal' sama data-bs-target nya disamain sama id dari modal nya -->
-    <PrivacyPolicy/>
+    <!-- <PrivacyPolicy/> -->
 
-</template>
-<!-- <template>
+<!-- // </template> -->
+<template>
     <div class="rules-container">
         <div class="rules-title">
             <h1>Auction Rules</h1>
@@ -102,7 +102,7 @@ let myModal;
         </div>
     </div>
     <PrivacyPolicy />
-</template> -->
+</template> 
 
 <style scoped>
 .rules-container {
