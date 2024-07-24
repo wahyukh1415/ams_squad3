@@ -42,9 +42,7 @@ const breakpoints = {
         :slidesPerView="1"
         :space-between="12"
         :breakpoints="breakpoints"
-        :loop="true"
-        @swiper="onSwiper"
-        @slideChange="onSlideChange">
+        :loop="true">
         <SwiperSlide v-for="auction in activeAuctions" :key="auction.id">
           <AuctionCard :content="auction" @detail-auction="openAuction"/>
         </SwiperSlide>
