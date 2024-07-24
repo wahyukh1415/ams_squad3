@@ -4,8 +4,8 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
 import { RouterLink } from "vue-router";
 import Logo from "./logo/Logo.vue";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap";
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap";
 
 const { authCheck, logout } = useAuthStore();
 

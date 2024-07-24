@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "question": "What is BidBuddy?",
+        "answer": "BidBuddy is a platform that allows users to bid on auction items. Or you can also sell items through the auction."
+    },
+    {
+        "id": 2,
+        "question": "How to use BidBuddy?",
+        "answer": "First, you need to create an account. Then, you can bid on auction items after you logged in to our website as a buyer. Or you can sell items through the auction after logged in to our website as a seller."
+    },
+    {
+        "id": 3,
+        "question": "Is BidBuddy safe?",
+        "answer": "BidBuddy is a safe auction platform that does not allow fraudulent activities. BidBuddy also provides a secure payment system so you don't have to worry about online scams."
+    },
+    {
+        "id": 4,
+        "question": "How do I place a bid?",
+        "answer": "To place a bid, navigate to the item you’re interested in and click the \"Place Bid\" button, then enter your bid amount."
+    },
+    {
+        "id": 5,
+        "question": "Can I cancel a bid once it’s placed?",
+        "answer": "Bids are generally binding and cannot be canceled. Check the auction’s specific terms and conditions for more details."
+    },
+    {
+        "id": 6,
+        "question": "How do I create an auction?",
+        "answer": "To create an auction, click the \"Create Auction\" button at the bottom of you’re screen, enter the item details, set your starting bid, and auction duration."
+    }
+]

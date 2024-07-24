@@ -9,12 +9,6 @@ import 'swiper/css/navigation';
 
 const { activeAuctions } = storeToRefs(useAuctionStore());
 const { openAuction } = useAuctionStore();
-const onSwiper = (swiper) => {
-  // console.log(swiper);
-};
-const onSlideChange = () => {
-  // console.log('slide change');
-};
 const modules = [Navigation, Autoplay]
 const breakpoints = {
   '768': {
@@ -48,9 +42,7 @@ const breakpoints = {
         :slidesPerView="1"
         :space-between="12"
         :breakpoints="breakpoints"
-        :loop="true"
-        @swiper="onSwiper"
-        @slideChange="onSlideChange">
+        :loop="true">
         <SwiperSlide v-for="auction in activeAuctions" :key="auction.id">
           <AuctionCard :content="auction" @detail-auction="openAuction"/>
         </SwiperSlide>
@@ -77,6 +69,7 @@ const breakpoints = {
   background-repeat: no-repeat;
   background-position: 50% calc(-130px - 1.5vw);
   background-size: cover;
+  pointer-events: none;
 }
 
 .swiper {
