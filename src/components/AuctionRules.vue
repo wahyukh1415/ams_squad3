@@ -4,19 +4,28 @@ import { ref } from "vue";
 import { onMounted } from "vue";
 let myModal;
 
-onMounted(() => {
-    myModal = new bootstrap.Modal(document.getElementById("alertPopup"));
-});
+// onMounted(() => {
+//     myModal = new bootstrap.Modal(document.getElementById("alertPopup"));
+// });
 
-const openModal = () => {
-    myModal.show();
-};
+// const openModal = () => {
+//     myModal.show();
+// };
 
-const closeModal = () => {
-    myModal.hide();
-};
+// const closeModal = () => {
+//     myModal.hide();
+// };
 </script>
 <template>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+    </button>
+    <!-- data-bs-toggle nya 'modal' sama data-bs-target nya disamain sama id dari modal nya -->
+    <PrivacyPolicy/>
+
+</template>
+<!-- <template>
     <div class="rules-container">
         <div class="rules-title">
             <h1>Auction Rules</h1>
@@ -93,7 +102,7 @@ const closeModal = () => {
         </div>
     </div>
     <PrivacyPolicy />
-</template>
+</template> -->
 
 <style scoped>
 .rules-container {
