@@ -8,7 +8,7 @@ import HomeComingAuction from "@/components/HomeComingAuction.vue";
 import Footer from "@/components/Footer.vue";
 import Navbar from "@/components/Navbar.vue";
 import CreateAuctionButton from "@/components/CreateAuctionButton.vue";
-import FAQ from "@/components/FaqTemp.vue";
+import Faq from "@/components/Faq.vue";
 import AuctionRules from "@/components/AuctionRules.vue";
 import Carousel from "@/components/Carousel.vue";
 
@@ -44,7 +44,7 @@ onMounted(() => {
   <HomeActiveAuction />
   <HomeComingAuction />
   <AuctionRules />
-  <FAQ />
+  <Faq />
   <CreateAuctionButton v-if="authUser.role == 'SELLER'" />
   <Footer />
 </template>

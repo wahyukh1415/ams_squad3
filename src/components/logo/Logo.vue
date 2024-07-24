@@ -123,9 +123,9 @@
   </svg>
 </template>
 
-<style>
+<!-- <style>
 svg {
   color: #5277a5;
   width: 200px;
 }
-</style>
+</style> -->
