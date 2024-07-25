@@ -45,7 +45,7 @@ const getListUser = async (page = 1) => {
   filteredUsers.value = listUser;
 
   currentPage.value = page;
-  hasMoreData.value = res.data.data.length === itemsPerPage; // If less than itemsPerPage, assume no more data
+  hasMoreData.value = res.data.data.length >= itemsPerPage; // If less than itemsPerPage, assume no more data
 };
 
 const deleteUser = (name) => {
@@ -105,31 +105,43 @@ const getRowNumber = (index) => {
           placeholder="Search"
         />
       </div>
-      <div id="btn-dropdown">
-        <button
-          type="button"
-          class="btn btn-primary dropdown-toggle"
-          @click="showDropdown = !showDropdown"
-          title="Add User"
-        >
-          <i class="bi bi-person-plus-fill"></i>
-          <span class="register-btn-text"> Register</span>
-        </button>
-        <ul
-          class="list-group list-unstyled position-absolute z-1 mt-1 bg-white"
-          v-if="showDropdown"
-        >
-          <li>
-            <RouterLink class="list-group-item" to="/register-seller"
-              >Register Seller</RouterLink
-            >
-          </li>
-          <li>
-            <RouterLink class="list-group-item" to="/register-buyer"
-              >Register Buyer</RouterLink
-            >
-          </li>
-        </ul>
+      <div class="d-flex gap-2">
+        <RouterLink to="/reset-password">
+          <button
+            type="button"
+            title="reset password"
+            class="btn btn-primary h-100"
+          >
+            <i class="bi bi-pencil-square mx-1"></i>
+            <span class="btn-text ">Reset Password</span>
+          </button>
+        </RouterLink>
+        <div id="btn-dropdown">
+          <button
+            type="button"
+            class="btn btn-primary dropdown-toggle h-100"
+            @click="showDropdown = !showDropdown"
+            title="Add User"
+          >
+            <i class="bi bi-person-plus-fill mx-1"></i>
+            <span class="btn-text">Register</span>
+          </button>
+          <ul
+            class="list-group list-unstyled position-absolute z-1 mt-1 bg-white"
+            v-if="showDropdown"
+          >
+            <li>
+              <RouterLink class="list-group-item" to="/register-seller"
+                >Register Seller</RouterLink
+              >
+            </li>
+            <li>
+              <RouterLink class="list-group-item" to="/register-buyer"
+                >Register Buyer</RouterLink
+              >
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <table class="table table-bordered">
@@ -155,7 +167,7 @@ const getRowNumber = (index) => {
             </button>
           </td>
         </tr>
-        <tr v-if="filteredUsers.length == 0">
+        <tr v-if="filteredUsers.length === 0">
           <td></td>
           <td>Data not found..</td>
           <td></td>
@@ -197,7 +209,7 @@ const getRowNumber = (index) => {
   width: 50%;
 }
 
-.register-btn-text {
+.btn-text {
   display: none;
 }
 
@@ -242,7 +254,7 @@ th {
     width: 30%;
   }
 
-  .register-btn-text {
+  .btn-text {
     display: inline;
   }
 }
