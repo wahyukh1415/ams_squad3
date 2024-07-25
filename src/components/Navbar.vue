@@ -18,7 +18,6 @@ const generateAvatar = (name) => {
 };
 const isMenuOpen = ref(false);
 const isProfileOpen = ref(false);
-onUnmounted(() => {});
 onMounted(() => {
   authCheck();
   avatarUrl.value = generateAvatar(user.name);

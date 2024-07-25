@@ -4,6 +4,20 @@ import { useAuthStore } from "@/stores/auth";
 import Navbar from "@/components/Navbar.vue";
 const { authUser } = storeToRefs(useAuthStore());
 import ProfileSettings from "../components/ProfileSettings.vue";
+import { onMounted, ref } from "vue";
+const data = localStorage.getItem("auth-user");
+const user = JSON.parse(data);
+const avatarProfile = ref("");
+
+const generateAvatar = (name) => {
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(
+    name
+  )}&rounded=true&background=f5f7fa&color=5277a5`;
+};
+console.log(user.name);
+onMounted(() => {
+  avatarProfile.value = generateAvatar(user.name);
+});
 </script>
 
 <template>
@@ -13,13 +27,8 @@ import ProfileSettings from "../components/ProfileSettings.vue";
       <div
         class="image-profile h-100 d-flex gap-3 justify-content-center flex-column align-items-center"
       >
-        <img
-          class="rounded-circle"
-          src="../assets//images/profile-image.jpg"
-          width="100"
-          height="100"
-          alt="profile-image"
-        />
+        <img :src="avatarProfile" width="100" height="100" alt="profile" />
+
         <h2>{{ authUser.name }}</h2>
       </div>
       <ul class="list-profile d-flex gap-5">
