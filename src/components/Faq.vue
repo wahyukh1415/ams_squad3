@@ -1,6 +1,5 @@
 <script setup>
 import faq from '@/assets/data/faq.json'
-import { reactive } from 'vue';
 import IllustrationFaq from './illustrations/IllustrationFaq.vue';
 
 const faqs = faq
