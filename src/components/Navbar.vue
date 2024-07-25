@@ -91,12 +91,14 @@ onMounted(() => {
                             <a
                                 class="nav-link fs-6 fw-semibold"
                                 aria-current="page"
-                                href="#"
-                                >List Auction</a
+                                href="#active-auction"
+                                >Auction</a
                             >
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link fs-6 fw-semibold" href="#"
+                            <a
+                                class="nav-link fs-6 fw-semibold"
+                                href="#auction-rules"
                                 >Rules</a
                             >
                         </li>
@@ -140,12 +142,6 @@ onMounted(() => {
 
                             <p class="fw-semibold fs-6 p-0 m-0">Profile</p>
                         </RouterLink>
-                        <li
-                            class="d-flex list-drop text-black text-decoration-none align-items-center px-3 gap-2 py-1"
-                        >
-                            <span><i class="bi bi-cash-stack"></i></span>
-                            <p class="fw-semibold fs-6 p-0 m-0">Auction</p>
-                        </li>
                         <RouterLink
                             v-if="user.role === 'ADMIN'"
                             class="d-flex list-drop text-black text-decoration-none align-items-center px-3 gap-2 py-1"

@@ -9,40 +9,35 @@ import image4 from "../assets/images/carousel/2.png";
 import image5 from "../assets/images/carousel/1.png";
 
 const slides = [
-  { image: image1 },
-  { image: image2 },
-  { image: image3 },
-  { image: image4 },
-  { image: image5 },
+    { image: image1 },
+    { image: image2 },
+    { image: image3 },
+    { image: image4 },
+    { image: image5 },
 ];
 </script>
 
 <template>
-  <div class="carousel">
     <Swiper
-      :modules="[Autoplay, Navigation, Pagination]"
-      :loop="true"
-      :slidesPerView="1"
-      :slidesPerGroup="1"
-      :autoplay="{
-        delay: 3000,
-        disableOnInteraction: false,
-      }"
+        :modules="[Autoplay, Navigation, Pagination]"
+        :loop="true"
+        :slidesPerView="1"
+        :slidesPerGroup="1"
+        :autoplay="{
+            delay: 3000,
+            disableOnInteraction: false,
+        }"
     >
-      <SwiperSlide v-for="(slide, index) in slides" :key="index">
-        <img :src="slide.image" alt="slide" class="carousel-image" />
-      </SwiperSlide>
+        <SwiperSlide v-for="(slide, index) in slides" :key="index">
+            <img :src="slide.image" alt="slide" class="carousel-image" />
+        </SwiperSlide>
     </Swiper>
-  </div>
 </template>
 
 <style scoped>
-.carousel {
-  padding-top: 63px;
-}
 .carousel-image {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
 }
 </style>

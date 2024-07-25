@@ -63,8 +63,25 @@ const register = async () => {
 </script>
 
 <template>
-    <Navbar />
     <div class="registerContainer my-5">
+        <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <router-link to="/" class="breadcrumb-item text-decoration-none"
+                    >Home</router-link
+                >
+                <router-link
+                    to="/dashboard"
+                    class="breadcrumb-item text-decoration-none"
+                    >Dashboard</router-link
+                >
+
+                <a
+                    class="breadcrumb-item active text-decoration-none"
+                    aria-current="page"
+                    >Register Seller</a
+                >
+            </ol>
+        </nav>
         <h1 class="form-title">Tambah Akun Seller</h1>
         <form class="formRegister">
             <div class="form-group position-relative">
@@ -116,6 +133,10 @@ const register = async () => {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+nav {
+    margin-left: -40rem;
 }
 
 .form-title {
