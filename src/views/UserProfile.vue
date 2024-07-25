@@ -1,11 +1,13 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
+import Navbar from "@/components/Navbar.vue";
 const { authUser } = storeToRefs(useAuthStore());
 import ProfileSettings from "../components/ProfileSettings.vue";
 </script>
 
 <template>
+  <Navbar />
   <div class="wrapper-profile">
     <div class="jumbroton d-flex flex-column align-items-center">
       <div
@@ -42,6 +44,7 @@ ul {
   padding: 0;
 }
 .wrapper-profile {
+  padding-top: 63px;
   font-family: "Poppins", sans-serif;
 }
 
@@ -49,6 +52,7 @@ ul {
   background-image: url("../assets/images/monopoli-money.png");
   color: white;
   height: 300px;
+  padding-top: 63px;
 }
 .image-profile h2 {
   font-size: 32px;

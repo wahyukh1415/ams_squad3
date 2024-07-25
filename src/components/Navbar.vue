@@ -1,6 +1,7 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { storeToRefs } from "pinia";
+
 import { useAuthStore } from "@/stores/auth";
 import { RouterLink } from "vue-router";
 import Logo from "./logo/Logo.vue";
@@ -17,7 +18,7 @@ const generateAvatar = (name) => {
 };
 const isMenuOpen = ref(false);
 const isProfileOpen = ref(false);
-
+onUnmounted(() => {});
 onMounted(() => {
   authCheck();
   avatarUrl.value = generateAvatar(user.name);

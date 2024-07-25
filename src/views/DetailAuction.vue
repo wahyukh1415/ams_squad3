@@ -1,6 +1,5 @@
 <script setup>
 import Footer from "@/components/Footer.vue";
-import CreateBid from "@/components/CreateBid.vue";
 import axios from "axios";
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { storeToRefs } from "pinia";
