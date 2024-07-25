@@ -1,5 +1,6 @@
 <script setup>
 import Footer from "@/components/Footer.vue";
+import CreateBid from "@/components/CreateBid.vue";
 import axios from "axios";
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { storeToRefs } from "pinia";
@@ -120,7 +121,7 @@ async function getAuction() {
     targetDate.value = new Date(auction.value.endedAt).getTime();
   });
 }
-
+console.log(auction.value.name);
 // Create Bidding
 async function createBidding() {
   const newData = {
@@ -143,9 +144,6 @@ async function createBidding() {
     console.error("Error creating bidding:", error);
   }
 }
-
-console.log(auction.value);
-console.log(auction);
 </script>
 <template>
   <section id="detail-auction" class="bg-primary-50">
@@ -202,6 +200,7 @@ console.log(auction);
             </div>
           </div>
         </div>
+
         <div class="col-sm-4 col-md-3">
           <div v-if="auction.highestBidderName">
             <p class="mb-1 fw-bold">Highest bid</p>
@@ -218,6 +217,21 @@ console.log(auction);
               class="d-flex flex-column gap-2"
               @submit.prevent="createBidding"
             >
+              <label for="bidder" class="fw-bold text-primary"
+                >Enter Your ID</label
+              >
+              <div class="input-group flex-nowrap">
+                <input
+                  type="number"
+                  name="bidder"
+                  id="bidder"
+                  class="form-control"
+                  placeholder="E.g., 123456789"
+                  aria-label="bidder"
+                  v-model="bidder"
+                  aria-describedby="addon-wrapping"
+                />
+              </div>
               <label for="bidding" class="fw-bold text-primary"
                 >Start Bidding Here:</label
               >
