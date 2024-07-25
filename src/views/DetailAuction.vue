@@ -14,13 +14,11 @@ const auction = ref([]);
 const { formatPrice } = usePriceStore();
 // Define the target date for the countdown
 const targetDate = ref("");
-const bidder = ref("");
 const bidding = ref("");
+const isDisabled = ref(false);
 
 let data = localStorage.getItem("auth-user");
 const dataUser = JSON.parse(data);
-console.log(dataUser.token);
-
 // Create a reactive reference to store the countdown values
 const countdown = ref({
   days: 0,
@@ -91,9 +89,15 @@ function auctionDuration(startDateString, endDateString) {
   return differenceInHours;
 }
 
+const disabled = () => {
+  if (dataUser.role !== "BUYER") {
+    isDisabled.value = true;
+  }
+};
 // Set up the interval to update the countdown every second
 let interval;
 onMounted(() => {
+  disabled();
   authCheck();
   getAuction();
   updateCountdown();
@@ -116,28 +120,28 @@ async function getAuction() {
     targetDate.value = new Date(auction.value.endedAt).getTime();
   });
 }
-console.log(auction.value.description);
 
 // Create Bidding
 async function createBidding() {
   const newData = {
-    bidder: parseInt(bidding.value),
-    bid: parseInt(bidder.value),
+    bidder: dataUser.id,
+    bid: parseInt(bidding.value),
   };
-  const response = await axios.post(
-    `http://127.0.0.1:8080/secured/auction/list/${router.currentRoute.value.query.id}`,
-    newData,
-    {
-      headers: {
-        Authorization: dataUser.token,
-      },
-    }
-  );
-  console.log(newData);
-  console.log(response);
-
-  console.log(auction.value);
-  console.log(auction);
+  try {
+    const response = await axios.post(
+      `http://127.0.0.1:8080/secured/auction/list/${router.currentRoute.value.query.id}`,
+      newData,
+      {
+        headers: {
+          Authorization: dataUser.token,
+        },
+      }
+    );
+    alert("Congratulations! Your bid has been successfully placed.");
+    location.reload();
+  } catch (error) {
+    console.error("Error creating bidding:", error);
+  }
 }
 
 console.log(auction.value);
@@ -199,31 +203,45 @@ console.log(auction);
           </div>
         </div>
         <div class="col-sm-4 col-md-3">
-          <!-- v-if="auction.highestBidderName" -->
-          <div>
-            <p class="mb-0">Highest bid</p>
-            <p class="highest-bid mb-0 text-primary-600">
-              {{ formatPrice(auction.highestBid) }}
-            </p>
-            <p class="highest-bidder">By : {{ auction.highestBidderName }}</p>
+          <div v-if="auction.highestBidderName">
+            <p class="mb-1 fw-bold">Highest bid</p>
+            <div class="bidder">
+              <p class="highest-bid mb-0 text-primary-600">
+                {{ formatPrice(auction.highestBid) }}
+              </p>
+              <p class="highest-bidder">By : {{ auction.highestBidderName }}</p>
+            </div>
           </div>
           <div class="form-bidder">
-            <form action="" @submit.prevent="createBidding">
-              <div class="form-group">
-                <label for="bidder">Id Bidder</label>
-                <input type="text" name="bidder" id="bidder" v-model="bidder" />
-              </div>
-              <div class="form-group">
-                <label for="bidding">Start Bidding Here:</label>
+            <form
+              action=""
+              class="d-flex flex-column gap-2"
+              @submit.prevent="createBidding"
+            >
+              <label for="bidding" class="fw-bold text-primary"
+                >Start Bidding Here:</label
+              >
+              <div class="input-group flex-nowrap">
+                <span class="input-group-text" id="addon-wrapping">Rp</span>
                 <input
                   type="text"
                   name="bidding"
                   id="bidding"
+                  class="form-control"
                   :placeholder="auction.highestBid"
+                  aria-label="bidding"
                   v-model="bidding"
+                  aria-describedby="addon-wrapping"
                 />
               </div>
-              <button type="submit" class="btn btn-primary w-100">
+              <button
+                type="submit"
+                :class="
+                  isDisabled ? 'btn-secondary btn-anjing ' : 'btn-primary'
+                "
+                class="btn w-100 rounded-2"
+                :disabled="isDisabled"
+              >
                 Bid Now
               </button>
             </form>
@@ -265,5 +283,9 @@ console.log(auction);
 
 .highest-bidder {
   font-size: small;
+}
+.btn-anjing {
+  cursor: not-allowed;
+  pointer-events: none;
 }
 </style>

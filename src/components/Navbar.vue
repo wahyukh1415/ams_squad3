@@ -4,180 +4,202 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
 import { RouterLink } from "vue-router";
 import Logo from "./logo/Logo.vue";
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import "bootstrap";
-
 const { authCheck, logout } = useAuthStore();
 
 const data = localStorage.getItem("auth-user");
 const user = JSON.parse(data);
-console.log(user.role);
+const avatarUrl = ref("");
 
-const toogleProfile = ref(false);
+const generateAvatar = (name) => {
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(
+    name
+  )}&rounded=true&background=cfe8fc80&color=5277a5`;
+};
+const isMenuOpen = ref(false);
+const isProfileOpen = ref(false);
 
 onMounted(() => {
-    authCheck();
+  authCheck();
+  avatarUrl.value = generateAvatar(user.name);
 });
 </script>
 
 <template>
-    <nav class="navbar py-3 border-2 border-bottom">
-        <div class="container">
-            <div class="row navbar-collapse" id="navbarTogglerDemo01">
-                <div class="col">
-                    <Logo class="logo" />
-                </div>
+  <nav
+    class="navbar navbar-expand-lg bg-body-tertiary position-fixed w-100 z-3 shadow"
+  >
+    <div class="container">
+      <!-- offcanvas toogler 1 -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="offcanvas"
+        aria-expanded="false"
+        data-bs-target="#offcanvasNavbar"
+        aria-controls="offcanvasNavbar"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-                <ul class="nav justify-content-center col-auto text-center">
-                    <li class="nav-item">
-                        <RouterLink
-                            class="nav-link active fs-5 fw-semibold"
-                            to="/"
-                            >Home</RouterLink
-                        >
-                    </li>
-                    <li class="nav-item" v-if="user.role === 'ADMIN'">
-                        <RouterLink
-                            class="nav-link active fs-5 fw-semibold"
-                            to="/dashboard"
-                            >Dashboard</RouterLink
-                        >
-                    </li>
-                    <li class="nav-item">
-                        <a
-                            class="nav-link fs-5 fw-semibold"
-                            aria-current="page"
-                            href="#"
-                            >List Auction</a
-                        >
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fs-5 fw-semibold" href="#">Rules</a>
-                    </li>
-                </ul>
+      <!-- logo -->
+      <div class="col">
+        <Logo class="logo" />
+      </div>
 
-                <div class="col text-end">
-                    <div class="nav-item dropdown">
-                        <div
-                            class="profile-dropdown position-relative d-flex align-items-center justify-content-end"
-                        >
-                            <div
-                                id="profile-account"
-                                @click="toogleProfile = !toogleProfile"
-                            >
-                                <img
-                                    src="../assets/images/profile-image.jpg"
-                                    width="45"
-                                    height="45"
-                                    alt="profile"
-                                    class="rounded-circle"
-                                />
-                                <i class="bi bi-caret-down-fill"></i>
-                            </div>
-
-                            <ul
-                                class="profile-menu position-absolute z-3"
-                                v-if="toogleProfile"
-                            >
-                                <RouterLink to="/user-profile" class="list-drp">
-                                    <span class="icon-drp"
-                                        ><i class="bi bi-person"></i
-                                    ></span>
-                                    <a
-                                        class="dropdown-item fw-semibold"
-                                        href="#scrollspyHeading3"
-                                    >
-                                        Profile</a
-                                    >
-                                </RouterLink>
-                                <li class="list-drp">
-                                    <span class="icon-drp"
-                                        ><i class="bi bi-cash-stack"></i
-                                    ></span>
-                                    <a
-                                        class="dropdown-item fw-semibold"
-                                        href="#scrollspyHeading4"
-                                    >
-                                        Auction</a
-                                    >
-                                </li>
-                                <RouterLink
-                                    v-if="user.role === 'ADMIN'"
-                                    class="list-drp"
-                                    to="/register-buyer"
-                                >
-                                    <span class="icon-drp"
-                                        ><i class="bi bi-emoji-sunglasses"></i
-                                    ></span>
-                                    <a
-                                        class="dropdown-item fw-semibold"
-                                        href="#scrollspyHeading4"
-                                    >
-                                        Register Buyer</a
-                                    >
-                                </RouterLink>
-                                <RouterLink
-                                    v-if="user.role === 'ADMIN'"
-                                    class="list-drp"
-                                    to="/register-seller"
-                                >
-                                    <span class="icon-drp"
-                                        ><img
-                                            width="20"
-                                            src="../assets/images/money-eyes.png"
-                                            alt=""
-                                    /></span>
-                                    <a
-                                        class="dropdown-item fw-semibold"
-                                        href="#scrollspyHeading4"
-                                    >
-                                        Register Seller</a
-                                    >
-                                </RouterLink>
-                                <RouterLink
-                                    v-if="user.role === 'ADMIN'"
-                                    class="list-drp"
-                                    to="/reset-password"
-                                >
-                                    <span class="icon-drp"
-                                        ><i class="bi bi-person-lock"></i
-                                    ></span>
-                                    <a
-                                        class="dropdown-item fw-semibold"
-                                        href="#scrollspyHeading4"
-                                    >
-                                        Reset Password</a
-                                    >
-                                </RouterLink>
-                                <li class="list-drp" @click="logout">
-                                    <span class="icon-drp"
-                                        ><i
-                                            class="bi bi-box-arrow-right"
-                                        ></i></span
-                                    ><a
-                                        class="dropdown-item fw-semibold"
-                                        href="#scrollspyHeading5"
-                                    >
-                                        Logout</a
-                                    >
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- offcanvas1 -->
+      <div
+        class="offcanvas offcanvas-start justify-content-center col-auto text-center"
+        tabindex="-1"
+        aria-labelledby="offcanvasNavbarLabel"
+        id="offcanvasNavbar"
+      >
+        <!-- offcanvas header -->
+        <div class="offcanvas-header">
+          <div class="offcanvas-title" id="offcanvasNavbarLabel">
+            <Logo class="logo" />
+          </div>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          ></button>
         </div>
-    </nav>
+        <!-- offcanvas body -->
+        <div
+          class="offcanvas-body justify-content-lg-center justify-content-start col-auto"
+        >
+          <ul class="nav d-flex flex-column flex-lg-row gap-lg-0 gap-2">
+            <li class="nav-item">
+              <RouterLink class="nav-link active fs-6 fw-semibold" to="/"
+                >Home</RouterLink
+              >
+            </li>
+            <li class="nav-item" v-if="user.role === 'ADMIN'">
+              <RouterLink
+                class="nav-link active fs-6 fw-semibold"
+                to="/dashboard"
+                >Dashboard</RouterLink
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fs-6 fw-semibold" aria-current="page" href="#"
+                >List Auction</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fs-6 fw-semibold" href="#">Rules</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- avatar coba -->
+      <div
+        class="col text-end d-flex flex-row align-items-center justify-content-end gap-1"
+      >
+        <div>
+          <h1 class="fs-6 text-primary fw-bold m-0">{{ user.name }}</h1>
+        </div>
+        <div class="btn-group">
+          <button
+            type="button"
+            class="dropdown-toggle border-0 bg-transparent text-primary-400 fs-5"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img :src="avatarUrl" width="45" height="45" alt="profile" />
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end py-3 profile-drp">
+            <RouterLink
+              to="/user-profile"
+              class="d-flex list-drop text-black text-decoration-none align-items-center px-3 gap-2 py-1"
+            >
+              <span>
+                <i class="bi bi-person"></i>
+              </span>
+
+              <p class="fw-semibold fs-6 p-0 m-0">Profile</p>
+            </RouterLink>
+            <li
+              class="d-flex list-drop text-black text-decoration-none align-items-center px-3 gap-2 py-1"
+            >
+              <span><i class="bi bi-cash-stack"></i></span>
+              <p class="fw-semibold fs-6 p-0 m-0">Auction</p>
+            </li>
+            <RouterLink
+              v-if="user.role === 'ADMIN'"
+              class="d-flex list-drop text-black text-decoration-none align-items-center px-3 gap-2 py-1"
+              to="/register-buyer"
+            >
+              <span><i class="bi bi-emoji-sunglasses"></i></span>
+              <p class="fw-semibold fs-6 p-0 m-0">Register Buyer</p>
+            </RouterLink>
+            <RouterLink
+              v-if="user.role === 'ADMIN'"
+              class="d-flex list-drop text-black text-decoration-none align-items-center px-3 gap-2 py-1"
+              to="/register-seller"
+            >
+              <span
+                ><img width="16" src="../assets/images/money-eyes.png" alt=""
+              /></span>
+              <p class="fw-semibold fs-6 p-0 m-0">Register Seller</p>
+            </RouterLink>
+            <RouterLink
+              v-if="user.role === 'ADMIN'"
+              class="d-flex list-drop text-black text-decoration-none align-items-center px-3 gap-2 py-1"
+              to="/reset-password"
+            >
+              <span><i class="bi bi-person-lock"></i></span>
+              <p class="fw-semibold fs-6 p-0 m-0">Reset Password</p>
+            </RouterLink>
+            <li
+              class="d-flex list-drop text-black text-decoration-none align-items-center px-3 gap-2 py-1"
+              @click="logout"
+            >
+              <span><i class="bi bi-box-arrow-right"></i></span>
+              <p class="fw-semibold fs-6 p-0 m-0">Logout</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- avatar -->
+    </div>
+  </nav>
 </template>
 <style scoped>
+nav {
+  padding: 12px 0;
+}
 .nav-link {
-    color: black;
-    position: relative;
+  color: black;
+  position: relative;
 }
 .nav-link:hover {
-    color: #5277a5;
+  color: #5277a5;
 }
-.nav-link::after {
+.logo {
+  color: #5277a5;
+  width: 200px;
+  height: 45px;
+}
+
+.profile-menu.active {
+  display: block;
+}
+.profile-drp {
+  width: 200px;
+}
+.profile-drp .list-drop:hover {
+  background-color: rgba(207, 232, 252, 0.502);
+}
+.profile-drp p:hover {
+  color: #5277a5;
+}
+@media (min-width: 992px) {
+  .nav-link::after {
     content: "";
     position: absolute;
     left: 50%;
@@ -187,41 +209,14 @@ onMounted(() => {
     background-color: transparent;
     transition: background-color 0.3s ease; /* Transisi untuk perubahan warna garis bawah */
     transform: translateX(-50%);
-}
-.nav-link:hover::after {
+  }
+  .nav-link:hover::after {
     background-color: #5277a5;
+  }
 }
-.logo {
-    color: #5277a5;
-    width: 200px;
-    height: 45px;
-}
-.profile-menu {
-    top: 55px;
-    right: 0px;
-    list-style: none;
-    text-align: left;
-    background-color: white;
-    padding: 15px 0;
-    border-radius: 5px;
-    width: 200px;
-    border: 1px solid black;
-}
-.profile-menu .list-drp {
-    padding: 4px 15px;
-    font-size: 18px;
-    display: flex;
-    cursor: pointer;
-    align-items: center;
-    text-decoration: none;
-    color: black;
-}
-.profile-menu .list-drp:hover {
-    background-color: rgba(207, 232, 253, 0.5);
-    color: #5277a5;
-}
-
-.icon-drp {
-    width: 30px;
+@media (max-width: 992px) {
+  .nav-item:hover {
+    background-color: rgba(207, 232, 252, 0.502);
+  }
 }
 </style>
