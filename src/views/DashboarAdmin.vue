@@ -20,7 +20,7 @@ onMounted(() => {
   <div>
     <Navbar />
     <main class="container">
-      <h1>Dashboar Admin</h1>
+      <h1 class="fw-bold">Dashboar Admin</h1>
       <h4>List User</h4>
       <User />
       <br />
