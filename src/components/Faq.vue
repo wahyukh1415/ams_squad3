@@ -16,19 +16,19 @@ const faqs = faq
             </div>
     
             <div class="row">
-                <div class="col-6">
-                    <IllustrationFaq class="illustration text-primary"/>
+                <div class="col-12 col-md-6">
+                    <IllustrationFaq class="illustration text-primary mb-4 mb-md-0"/>
                 </div>
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                     <div class="accordion accordion-flush">
-                        <div v-for="faq in faqs" :key="faq.id" class="accordion-item py-2">
+                        <div v-for="(faq, index) in faqs" :key="faq.id" class="accordion-item py-2">
                             <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="`#${faq.id}`"
-                                    aria-expanded="true" :aria-controls="faq.id">
+                                <button class="accordion-button" :class="{ 'collapsed': index !== 0 }" type="button" data-bs-toggle="collapse" :data-bs-target="`#${faq.id}`"
+                                    :aria-controls="faq.id">
                                     {{ faq.question }}
                                 </button>
                             </h2>
-                            <div :id="faq.id" class="accordion-collapse collapse" data-bs-parent="#faq">
+                            <div :id="faq.id" class="accordion-collapse collapse" :class="{ 'show': index === 0 }" data-bs-parent="#faq">
                                 <div class="accordion-body pt-0 text-secondary pe-5">
                                     {{ faq.answer }}
                                 </div>
