@@ -5,10 +5,10 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
 import { RouterLink } from "vue-router";
 import Logo from "./logo/Logo.vue";
+
+const { authUser } = storeToRefs(useAuthStore())
 const { authCheck, logout } = useAuthStore();
 
-const data = localStorage.getItem("auth-user");
-const user = JSON.parse(data);
 const avatarUrl = ref("");
 
 const generateAvatar = (name) => {
@@ -20,7 +20,7 @@ const isMenuOpen = ref(false);
 const isProfileOpen = ref(false);
 onMounted(() => {
     authCheck();
-    avatarUrl.value = generateAvatar(user.name);
+    avatarUrl.value = generateAvatar(authUser.value.name);
 });
 </script>
 
@@ -80,7 +80,7 @@ onMounted(() => {
                                 >Home</RouterLink
                             >
                         </li>
-                        <li class="nav-item" v-if="user.role === 'ADMIN'">
+                        <li class="nav-item" v-if="authUser.role === 'ADMIN'">
                             <RouterLink
                                 class="nav-link active fs-6 fw-semibold"
                                 to="/dashboard"
@@ -112,7 +112,7 @@ onMounted(() => {
             >
                 <div>
                     <h1 class="fs-6 text-primary fw-bold m-0">
-                        {{ user.name }}
+                        {{ authUser.name }}
                     </h1>
                 </div>
                 <div class="btn-group">
@@ -143,7 +143,7 @@ onMounted(() => {
                             <p class="fw-semibold fs-6 p-0 m-0">Profile</p>
                         </RouterLink>
                         <RouterLink
-                            v-if="user.role === 'ADMIN'"
+                            v-if="authUser.role === 'ADMIN'"
                             class="d-flex list-drop text-black text-decoration-none align-items-center px-3 gap-2 py-1"
                             to="/register-buyer"
                         >
@@ -153,7 +153,7 @@ onMounted(() => {
                             </p>
                         </RouterLink>
                         <RouterLink
-                            v-if="user.role === 'ADMIN'"
+                            v-if="authUser.role === 'ADMIN'"
                             class="d-flex list-drop text-black text-decoration-none align-items-center px-3 gap-2 py-1"
                             to="/register-seller"
                         >
@@ -168,7 +168,7 @@ onMounted(() => {
                             </p>
                         </RouterLink>
                         <RouterLink
-                            v-if="user.role === 'ADMIN'"
+                            v-if="authUser.role === 'ADMIN'"
                             class="d-flex list-drop text-black text-decoration-none align-items-center px-3 gap-2 py-1"
                             to="/reset-password"
                         >
