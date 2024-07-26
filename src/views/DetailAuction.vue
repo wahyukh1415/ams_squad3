@@ -213,7 +213,9 @@ async function createBidding() {
           <div v-else>
             <p class="mb-1 fw-bold">Highest bid</p>
             <div class="bidder">
-              <p class="highest-bidder">There are no bids on this auction yet</p>
+              <p class="highest-bidder">
+                There are no bids on this auction yet
+              </p>
             </div>
           </div>
           <div class="form-bidder">
@@ -255,9 +257,7 @@ async function createBidding() {
               </div>
               <button
                 type="submit"
-                :class="
-                  isDisabled ? 'btn-secondary btn-anjing ' : 'btn-primary'
-                "
+                :class="isDisabled ? ' btn-blok ' : 'btn-primary'"
                 class="btn w-100 rounded-2"
                 :disabled="isDisabled"
               >
@@ -303,7 +303,7 @@ async function createBidding() {
 .highest-bidder {
   font-size: small;
 }
-.btn-anjing {
+.btn-blok {
   cursor: not-allowed;
   pointer-events: none;
 }

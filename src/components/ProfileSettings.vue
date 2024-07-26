@@ -1,26 +1,66 @@
 <script setup>
 import axios from "axios";
 import { RouterLink } from "vue-router";
-import { onMounted, ref } from "vue";
+import { onMounted, watch, reactive, ref } from "vue";
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import "bootstrap";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
 
 const emailProfile = ref("");
-const passProfile = ref("");
 const nameProfile = ref("");
-const reset = ref(true);
+const errors = reactive({
+  email: "",
+  username: "",
+  response: "",
+});
+
 const { authUser } = storeToRefs(useAuthStore());
 const { authCheck } = useAuthStore();
 let data = localStorage.getItem("auth-user");
 const dataUser = JSON.parse(data);
-console.log(dataUser);
+const isDisabled = ref(false);
+const validateEmail = (email) => {
+  if (!email) {
+    errors.email = "Email Address cannot be empty";
+  } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+    errors.email = "Please enter a valid Email Address";
+  } else {
+    errors.email = "";
+  }
+};
+
+const validateUsername = (userName) => {
+  if (!userName) {
+    errors.username = "Username cannot be empty";
+  } else {
+    errors.username = "";
+  }
+};
+
+watch(() => emailProfile.value, validateEmail);
+watch(() => nameProfile.value, validateUsername);
+
+watch(
+  [() => errors.email, () => errors.username],
+  () => {
+    isDisabled.value = !!errors.email || !!errors.username;
+  },
+  { immediate: true }
+);
+
 onMounted(() => {
   authCheck();
 });
 
-async function updateProfile() {
+function updateProfile() {
+  if (errors.email === "" || errors.username === "") {
+    authentication();
+  }
+}
+console.log(errors.email);
+
+async function authentication() {
   const newData = {
     ...authUser.value,
     name: nameProfile.value,
@@ -96,6 +136,7 @@ async function updateProfile() {
                     >
                     <input
                       class="w-100 border border-1 border-black p-3 rounded-1"
+                      :class="{ 'is-invalid': errors.username }"
                       type="text"
                       minlength="1"
                       maxlength="30"
@@ -105,6 +146,9 @@ async function updateProfile() {
                       placeholder="Enter your name"
                       v-model="nameProfile"
                     />
+                    <div v-if="errors.username" class="invalid-feedback">
+                      {{ errors.username }}
+                    </div>
                   </div>
 
                   <div class="form-group position-relative">
@@ -113,6 +157,7 @@ async function updateProfile() {
                     >
                     <input
                       class="w-100 border border-1 border-black p-3 rounded-1"
+                      :class="{ 'is-invalid': errors.email }"
                       autocomplete="email"
                       type="email"
                       minlength="1"
@@ -121,6 +166,9 @@ async function updateProfile() {
                       placeholder="Enter your email"
                       v-model="emailProfile"
                     />
+                    <div v-if="errors.email" class="invalid-feedback">
+                      {{ errors.email }}
+                    </div>
                   </div>
                 </form>
               </div>
@@ -137,7 +185,9 @@ async function updateProfile() {
                 <button
                   @click="updateProfile"
                   type="submit"
+                  :class="isDisabled ? ' btn-dissabled ' : 'btn-primary'"
                   class="btn fw-semibold btn-primary w-100"
+                  :disabled="isDisabled"
                 >
                   SAVE
                 </button>
@@ -229,5 +279,9 @@ async function updateProfile() {
   font-size: 12px;
   top: -10px;
   left: 10px;
+}
+.btn-dissabled {
+  cursor: not-allowed;
+  pointer-events: none;
 }
 </style>
