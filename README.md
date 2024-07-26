@@ -1,7 +1,10 @@
 # ams_squad3
+
 Auction Management System
 
 BE Resource: https://github.com/ArbiNMaki/sksk-kelompok1/tree/main?tab=readme-ov-file
+
+### PASTIKAN CLONE RESOURCE BE DARI BRANCH CORS
 
 BE Team:
 
@@ -10,7 +13,6 @@ BE Team:
 @David Sagala
 
 @Bagas Sukma Patira
-
 
 FE Team:
 
@@ -21,7 +23,6 @@ FE Team:
 @farhanbsyr - Farhan
 
 @rsonyw - Rohmatullah Sony Wijaya
-
 
 ## Project Setup
 
