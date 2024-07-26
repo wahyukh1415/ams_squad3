@@ -8,7 +8,6 @@ import { onMounted, ref } from "vue";
 const data = localStorage.getItem("auth-user");
 const user = JSON.parse(data);
 const avatarProfile = ref("");
-console.log(user);
 
 const generateAvatar = (name) => {
   return `https://ui-avatars.com/api/?name=${encodeURIComponent(
