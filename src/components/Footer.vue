@@ -39,7 +39,7 @@ import Logo from "../components/logo/Logo.vue";
       </div>
     </div>
     <div class="text-center p-3 bg-primary-600">
-      <p class="text-light">&copy; 2024 Copyright BidBuddy.Ltd</p>
+      <p class="text-light mb-0">&copy; 2024 Copyright BidBuddy.Ltd</p>
     </div>
   </footer>
 </template>
@@ -49,7 +49,7 @@ import Logo from "../components/logo/Logo.vue";
   width: 40px;
   height: 40px;
   font-size: 18px;
-  color: #000;
+  color: #4976aa;
   border-radius: 50%;
   background-color: #ffffff;
   display: flex;
@@ -61,7 +61,7 @@ import Logo from "../components/logo/Logo.vue";
 }
 
 .link:hover {
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .size {
