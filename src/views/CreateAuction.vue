@@ -23,8 +23,8 @@ async function createAuction() {
         name: name.value,
         description: description.value,
         minimumPrice: minimumPrice.value,
-        startedAt: new Date(startedAt.value).toISOString(),
-        endedAt: new Date(endedAt.value).toISOString(),
+        startedAt: `${startedAt.value}:00${getTimeZoneOffset()}`,
+        endedAt: `${endedAt.value}:00${getTimeZoneOffset()}`,
     };
     try {
         const response = await axios.post(
@@ -40,10 +40,10 @@ async function createAuction() {
             console.log(response.data);
             return response.data;
         } else {
-            throw new Error("Failed to register user");
+            throw new Error("Failed to create auction");
         }
     } catch (error) {
-        console.error("Error during registration:", error);
+        console.error("Error during create auction:", error);
         throw error;
     }
 }
@@ -56,12 +56,23 @@ const create = async () => {
     try {
         await createAuction();
         alert("Berhasil Membuat Lelang Baru");
-        router.push("/");
+        // router.push("/");
     } catch (error) {
         alert("Gagal Membuat Lelang Baru");
         console.log(error);
     }
 };
+
+function getTimeZoneOffset() {
+    const offset = new Date().getTimezoneOffset();
+    const sign = offset > 0 ? '-' : '+';
+    const absOffset = Math.abs(offset);
+    const hours = String(Math.floor(absOffset / 60)).padStart(2, '0');
+    const minutes = String(absOffset % 60).padStart(2, '0');
+    
+    return `${sign}${hours}:${minutes}`;
+}
+
 </script>
 
 <template>
