@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from 'vue'
 import { useAuctionStore } from "@/stores/auction";
 import { storeToRefs } from "pinia";
 import AuctionCard from "./AuctionCardComing.vue";
@@ -11,6 +12,9 @@ const { comingAuctions } = storeToRefs(useAuctionStore());
 const { openAuction } = useAuctionStore();
 
 const modules = [Autoplay, EffectCards]
+const loop = computed(() => 
+  comingAuctions.value.length < 2 ? false : true
+)
 </script>
 
 <template>
@@ -42,7 +46,7 @@ const modules = [Autoplay, EffectCards]
               :slidesPerView="1"
               :spaceBetween="12"
               :grabCursor="true"
-              :loop="true"
+              :loop="loop"
               :autoplay="{
                 delay: 2000,
                 disableOnInteraction: false,

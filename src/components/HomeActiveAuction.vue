@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css'
 import 'swiper/css/navigation';
+import { computed } from "vue";
 
 const { activeAuctions } = storeToRefs(useAuctionStore());
 const { openAuction } = useAuctionStore();
@@ -20,6 +21,9 @@ const breakpoints = {
     spaceBetween: 40,
   },
 }
+const loop = computed(() => 
+  activeAuctions.value.length < 4 ? false : true
+)
 </script>
 
 <template>
@@ -42,7 +46,7 @@ const breakpoints = {
         :slidesPerView="1"
         :space-between="12"
         :breakpoints="breakpoints"
-        :loop="true">
+        :loop="loop">
         <SwiperSlide v-for="auction in activeAuctions" :key="auction.id">
           <AuctionCard :content="auction" @detail-auction="openAuction"/>
         </SwiperSlide>

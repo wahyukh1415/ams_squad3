@@ -210,6 +210,12 @@ async function createBidding() {
               <p class="highest-bidder">By : {{ auction.highestBidderName }}</p>
             </div>
           </div>
+          <div v-else>
+            <p class="mb-1 fw-bold">Highest bid</p>
+            <div class="bidder">
+              <p class="highest-bidder">There are no bids on this auction yet</p>
+            </div>
+          </div>
           <div class="form-bidder">
             <form
               action=""

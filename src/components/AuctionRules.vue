@@ -3,7 +3,7 @@ import PrivacyPolicy from "./PrivacyPolicy.vue";
 </script>
 
 <template>
-    <div class="rules-container">
+    <div id="auction-rules" class="rules-container">
         <div class="rules-title">
             <h1 class="section-title mb-3 text-primary-950">Auction Rules</h1>
         </div>
