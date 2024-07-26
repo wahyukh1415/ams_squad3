@@ -58,7 +58,6 @@ function updateProfile() {
     authentication();
   }
 }
-console.log(errors.email);
 
 async function authentication() {
   const newData = {
@@ -66,17 +65,21 @@ async function authentication() {
     name: nameProfile.value,
     email: emailProfile.value,
   };
-  const response = await axios.put(
-    "http://127.0.0.1:8080/secured/user/update-profile",
-    newData,
-    {
-      headers: {
-        Authorization: dataUser.token,
-      },
-    }
-  );
-  localStorage.setItem("auth-user", JSON.stringify(newData));
-  location.reload();
+  try {
+    const response = await axios.put(
+      "http://127.0.0.1:8080/secured/user/update-profile",
+      newData,
+      {
+        headers: {
+          Authorization: dataUser.token,
+        },
+      }
+    );
+    localStorage.setItem("auth-user", JSON.stringify(newData));
+    location.reload();
+  } catch (error) {
+    console.error("Error Update Profile:", error);
+  }
 }
 </script>
 

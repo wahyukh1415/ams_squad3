@@ -14,7 +14,6 @@ const generateAvatar = (name) => {
     name
   )}&rounded=true&background=f5f7fa&color=5277a5`;
 };
-console.log(user.name);
 onMounted(() => {
   avatarProfile.value = generateAvatar(user.name);
 });
