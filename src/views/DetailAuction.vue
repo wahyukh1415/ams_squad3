@@ -15,6 +15,7 @@ const { formatPrice } = usePriceStore();
 // Define the target date for the countdown
 const targetDate = ref("");
 const bidding = ref("");
+const bidder = ref("");
 const isDisabled = ref(false);
 
 let data = localStorage.getItem("auth-user");
@@ -124,7 +125,7 @@ console.log(auction.value.name);
 // Create Bidding
 async function createBidding() {
   const newData = {
-    bidder: dataUser.id,
+    bidder: parseInt(bidder.value),
     bid: parseInt(bidding.value),
   };
   try {
